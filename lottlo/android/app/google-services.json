@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "715833886581",
+    "project_id": "lottlo",
+    "storage_bucket": "lottlo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715833886581:android:5814dd10d9ba7c33f6353c",
+        "android_client_info": {
+          "package_name": "lottlo.wala.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "715833886581-iumvtqokoupoa0vpgf8403fmjbpacnco.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "lottlo.wala.app",
+            "certificate_hash": "a76143f665b6948d755c41381ca3cc1629426423"
+          }
+        },
+        {
+          "client_id": "715833886581-74so992ov82qguaaadrkdcbf0lv0bb2d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZFduaY3vIX-daoaZCEHe1T7QZ7z_rrW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "715833886581-74so992ov82qguaaadrkdcbf0lv0bb2d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "715833886581-hve1v2blsvubgbepoqe4hn2ti3o1oi1f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "lottlo.wala.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
