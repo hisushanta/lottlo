@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
@@ -8,6 +9,7 @@ class ItemInfo{
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Map<String,List<List>> itemInfo = {};
+  List<String> imageUrls = [];
   Map<String,List<List>> orderActiveStatus = {};
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(true); // To track loading state
   Map<String, Map<String, dynamic>> userProfile = {}; // New map for user profile
@@ -17,6 +19,7 @@ class ItemInfo{
   ItemInfo(this.uuid) {
     itemInfo[uuid!] = [];
     orderActiveStatus[uuid!] = [];
+    imageUrls = [];
     userProfile[uuid!] = {}; // Initialize user profile
     _initializeData();
     // Initialize the data if have
@@ -71,6 +74,27 @@ class ItemInfo{
     }else{
       updateUserProfile("Unknown", "assets/mainIcon.png", 0.0);
     }
+
+  // Get all images
+  imageUrls = await getAllImageUrls();
+  }
+  Future<List<String>> getAllImageUrls() async {
+    List<String> imageUrls = [];
+    
+    try {
+      // Reference to the folder in Firebase Storage
+      final ref = FirebaseStorage.instance.ref().child('assets'); // Replace 'your_folder' with your folder path
+      final ListResult result = await ref.listAll();
+      
+      for (final Reference fileRef in result.items) {
+        String downloadUrl = await fileRef.getDownloadURL();
+        imageUrls.add(downloadUrl);
+      }
+    } catch (e) {
+      print('Error retrieving image URLs: $e');
+    }
+    
+    return imageUrls;
   }
 
   String getUserName(){
