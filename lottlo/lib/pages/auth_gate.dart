@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
 
 class AuthGate extends StatelessWidget {
- const AuthGate({super.key});
+ bool checkWhat = false;
 
  @override
  Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class AuthGate extends StatelessWidget {
            child: SignInScreen(
              providers: [
                EmailAuthProvider(),
-               GoogleProvider(clientId: "715833886581-iumvtqokoupoa0vpgf8403fmjbpacnco.apps.googleusercontent.com"),
+            //    GoogleProvider(clientId: "715833886581-iumvtqokoupoa0vpgf8403fmjbpacnco.apps.googleusercontent.com"),
              ],
              headerBuilder: (context, constraints, shrinkOffset) {
                return Padding(
@@ -32,6 +31,7 @@ class AuthGate extends StatelessWidget {
                );
              },
              subtitleBuilder: (context, action) {
+               checkWhat = action == AuthAction.signIn? true:false;
                return Padding(
                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                  child: action == AuthAction.signIn
