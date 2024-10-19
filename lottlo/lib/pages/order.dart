@@ -27,7 +27,6 @@ class AddItemScreen extends StatefulWidget {
 }
 
 class _AddItemScreenState extends State<AddItemScreen> {
-  final TextEditingController _phoneNumberController = TextEditingController();
   int selectedSizeIndex = 0;
 
   @override
@@ -178,32 +177,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   ),
                   const SizedBox(height: 24),
                   
-                  // Phone Number Input
-                  const Text(
-                    "Contact Details",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: _phoneNumberController,
-                    decoration: InputDecoration(
-                      labelText: 'Phone Number',
-                      prefixIcon: Icon(Icons.phone, color: Colors.green),
-                      labelStyle: const TextStyle(color: Colors.green),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.green, width: 2),
-                      ),
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
                   const SizedBox(height: 24),
                   // Price and Buy Button Section
                   Row(
@@ -224,31 +197,21 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           String date = "${now.day}/${now.month}/${now.year}";
                           String period = now.hour >= 12 ? 'pm' : 'am';
                           String time = "${now.hour}:${now.minute}$period";
-                          if (_phoneNumberController.text.isNotEmpty){
-                            if(_phoneNumberController.text.length == 10){
+                          if (info!.checkHaveNumberOrAddress()){
                               info!.addOrder(widget.name,widget.image,widget.price,widget.pindex,info!.getUserName(),
-                                    _phoneNumberController.text,"Submit",widget.isize[selectedSizeIndex],date,time,'0');
+                                    info!.userProfile[info!.uuid]!['number'],"Submit",widget.isize[selectedSizeIndex],date,time,'0');
                               Navigator.pop(context);
                             } else{
                              ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text("Please check the phone number"),
+                                content: Text("Please Add The Address And Number"),
                                 duration: Duration(seconds: 1),
                                 backgroundColor: Colors.red,
                               ),
                             ); 
                             }
                             
-                          } else{
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Please enter the phone number"),
-                                duration: Duration(seconds: 1),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
-                        },
+                          },
                         icon: const Icon(Icons.shopping_bag_outlined,
                             color: Colors.white),
                         style: ElevatedButton.styleFrom(
