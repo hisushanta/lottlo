@@ -197,9 +197,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           String date = "${now.day}/${now.month}/${now.year}";
                           String period = now.hour >= 12 ? 'pm' : 'am';
                           String time = "${now.hour}:${now.minute}$period";
+                          // Get the date after 3 days
+                          DateTime dateAfterThreeDays = now.add(Duration(days: 3));
+                          String futureDate = "${dateAfterThreeDays.day}/${dateAfterThreeDays.month}/${dateAfterThreeDays.year}";
+
                           if (info!.checkHaveNumberOrAddress()){
                               info!.addOrder(widget.name,widget.image,widget.price,widget.pindex,info!.getUserName(),
-                                    info!.userProfile[info!.uuid]!['number'],"Submit",widget.isize[selectedSizeIndex],date,time,'0');
+                                    info!.userProfile[info!.uuid]!['number'],"Order Confirmed",widget.isize[selectedSizeIndex],date,time,futureDate,'','');
                               Navigator.pop(context);
                             } else{
                              ScaffoldMessenger.of(context).showSnackBar(

@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 import 'third_page.dart';
 
+// ignore: must_be_immutable
 class AuthGate extends StatelessWidget {
  bool checkWhat = false;
+
+  AuthGate({super.key});
 
  @override
  Widget build(BuildContext context) {
@@ -20,7 +23,7 @@ class AuthGate extends StatelessWidget {
            child: SignInScreen(
              providers: [
                EmailAuthProvider(),
-            //    GoogleProvider(clientId: "715833886581-iumvtqokoupoa0vpgf8403fmjbpacnco.apps.googleusercontent.com"),
+              //  GoogleProvider(clientId: "715833886581-74so992ov82qguaaadrkdcbf0lv0bb2d.apps.googleusercontent.com"),
              ],
              headerBuilder: (context, constraints, shrinkOffset) {
                return Padding(

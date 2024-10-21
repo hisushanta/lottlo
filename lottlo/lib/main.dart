@@ -1,6 +1,7 @@
 import 'package:lottlo/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:lottlo/pages/third_page.dart';
 import 'pages/auth_gate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'pages/home.dart';
@@ -47,7 +48,10 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context, snapshot) {
         if (snapshot.hasData){
           info = ItemInfo(snapshot.data!.uid);
+          
           return const Home();
+
+          
         }
         else{
           return Scaffold(

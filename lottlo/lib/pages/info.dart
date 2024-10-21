@@ -103,6 +103,7 @@ class ItemInfo{
   }
   
  bool checkHaveNumberOrAddress(){
+  
   print("Address: ${userProfile[uuid]!['address'].isNotEmpty}, Number: ${userProfile[uuid]!["number"].isNotEmpty}");
   if (userProfile[uuid]!['address'].isNotEmpty && userProfile[uuid]!["number"].isNotEmpty){
     return true;
@@ -170,7 +171,10 @@ class ItemInfo{
     }
   }
 
-  void addOrder(String itemName,String image, String price,String pindex, String userName,  String number,String status, String size ,String date, String time, String expactedDate){
+  void addOrder(String itemName,String image, String price,String pindex, String userName,  String number,
+                String status, String size ,String date, String time, String expactedDate,
+                String outForOrderDate, String DeliveredDate
+                  ){
       int aindex = 0;
       if (orderActiveStatus[uuid]!.isNotEmpty){
         for (var item in orderActiveStatus[uuid]!){
@@ -181,7 +185,8 @@ class ItemInfo{
         aindex += 1;
       }
 
-      _saveOrderToFirestore({"$aindex":[itemName,image,price,pindex,userName,number,size,status,aindex.toString(),date,time,expactedDate]}, aindex.toString());
+      _saveOrderToFirestore({"$aindex":[itemName,image,price,pindex,userName,number,size,status,aindex.toString(),date,time,expactedDate,
+                            outForOrderDate,DeliveredDate]}, aindex.toString());
   }
 
 }

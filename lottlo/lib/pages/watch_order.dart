@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottlo/main.dart';
 import 'package:lottlo/pages/home.dart';
+import 'package:lottlo/pages/each_order_details.dart';
 
 class WatchOrder extends StatefulWidget {
   @override
@@ -49,133 +50,36 @@ class _WatchOrder extends State<WatchOrder> {
                     itemCount: orders[userId]!.length,
                     itemBuilder: (context, index) {
                       var order = orders[userId]![index];
-                      bool isActive = order[7] != 'Submit';
+                      String isActive = order[7];
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 8.0),
                         child: GestureDetector(
                           onTap: () {
-                            // Handle item tap with an animation effect
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Dialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    elevation: 16,
-                                    backgroundColor: Colors.white,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                Icons.info_outline,
-                                                color: order[7] == 'Active' ? Colors.green : Colors.orange,
-                                                size: 28,
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Text(
-                                                'Details',
-                                                style:  TextStyle(
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: order[7] == 'Active' ? Colors.green : Colors.orange,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 20),
-                                          Text(
-                                            'User: ${order[4]}',
-                                            style: const TextStyle(fontSize: 18, color: Colors.black54),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Text(
-                                            'Item: ${order[0]}',
-                                            style: const TextStyle(fontSize: 18, color: Colors.black54),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Text(
-                                            'Number: ${order[5]}',
-                                            style: const TextStyle(fontSize: 18, color: Colors.black54),
-                                          ),
-                                         
-                                          const SizedBox(height: 10),
-                                          Text(
-                                            'Price: ${order[2].replaceAll(" ","")}',
-                                            style: const TextStyle(fontSize: 18, color: Colors.black54),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          info!.itemCheck(info!.scrabItem,order[0])?
-                                            Text(
-                                              'Size: ${order[6]}',
-                                              style: const TextStyle(fontSize: 18, color: Colors.black54),
-                                            ) :info!.itemCheck(info!.scrapItem2,order[0])?
-                                             Text(
-                                              'Quantity: ${order[6]}',
-                                              style: const TextStyle(fontSize: 18, color: Colors.black54),
-                                            ): Text(
-                                              'Kg: ${order[6]}',
-                                              style: const TextStyle(fontSize: 18, color: Colors.black54),
-                                            ),
-                                          const SizedBox(height: 10),
-                                          Text(
-                                            'Booking Date: ${order[9]}',
-                                            style: const TextStyle(fontSize: 18, color: Colors.black54),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Text(
-                                            'Booking Time: ${order[10]}',
-                                            style: const TextStyle(fontSize: 18, color: Colors.black54),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          if(order[11] != '0')
-                                            Text(
-                                            'Recive Date: ${order[11]}',
-                                            style: const TextStyle(fontSize: 18, color: Colors.black54),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Text(
-                                            'Status: ${order[7]}',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color: order[7] == 'Active' ? Colors.green : Colors.orange,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 20),
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: order[7] == "Active" ? Colors.green[700]: Colors.orange,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
-                                                ),
-                                                padding: const EdgeInsets.symmetric(
-                                                    vertical: 12, horizontal: 20),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text(
-                                                "OK",
-                                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.white),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
+                            // Navigate to ProductDetailsScreen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProductDetailsScreen(
+                                  user: order[4],
+                                  item: order[0],
+                                  number: order[5],
+                                  price: order[2].replaceAll(" ", ""),
+                                  size: '${order[6]}',
+                                  bookingDate: order[9],
+                                  bookingTime: order[10],
+                                  estimatedDeliveryDate: order[11] != '0' ? order[11] : '',
+                                  status: order[7],
+                                  imageUrl: order[1], // Replace with actual image URL
+                                  orderConfirmedDate: order[9],
+                                  outForDeliveryDate: order[12],
+                                  deliveredDate: order[13],
+                                  quantity: '1',
+                                ),
+                              ),
+                            );
+
 
                           },
                           child: Card(
@@ -184,21 +88,21 @@ class _WatchOrder extends State<WatchOrder> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                               side: BorderSide(
-                                  color: isActive
-                                      ? Colors.green
-                                      : Colors.orange),
+                                  color: isActive=="Order Confirmed"
+                                      ? Colors.grey
+                                      : isActive == "Out for Delivery"? Colors.orange : Colors.green),
                             ),
                             child: ListTile(
                               leading: CircleAvatar(
                                 radius: 24,
-                                backgroundColor: isActive
-                                    ? Colors.green[50]
-                                    : Colors.orange[50],
+                                backgroundColor: isActive=="Order Confirmed"
+                                      ? Colors.grey[50]
+                                      : isActive == "Out for Delivery"? Colors.orange[50] : Colors.green[50],
                                 child: Icon(
                                   Icons.watch,
-                                  color: isActive
-                                      ? Colors.green[800]
-                                      : Colors.orange,
+                                  color: isActive=="Order Confirmed"
+                                      ? Colors.grey
+                                      : isActive == "Out for Delivery"? Colors.orange : Colors.green
                                 ),
                               ),
                               title: Text(
@@ -207,24 +111,11 @@ class _WatchOrder extends State<WatchOrder> {
                                     fontWeight: FontWeight.bold, fontSize: 18),
                               ),
                               subtitle: Text(
-                                info!.itemCheck(info!.scrabItem, order[0])
-                                    ? 'Kg: ${order[6]} \nPrice: ${order[2].replaceAll(" ","")}'
-                                    :info!.itemCheck(info!.scrapItem2,order[0])
-                                    ?'Quantity: ${order[6]} \nPrice: ${order[2].replaceAll(" ","")}'
-                                    :"Kg: ${order[6]} \nPrice: ${order[2]}",
+                                'Size: ${order[6]} \nPrice: ${order[2].replaceAll(" ","")}',
+                                    
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.grey[700],
-                                ),
-                              ),
-                              trailing: Text(
-                                order[7],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: isActive
-                                      ? Colors.green[800]
-                                      : Colors.orange[800],
                                 ),
                               ),
                             ),
