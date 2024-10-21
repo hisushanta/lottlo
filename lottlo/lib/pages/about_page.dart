@@ -17,25 +17,29 @@ class UserProfilePage extends StatefulWidget {
 class _UserProfilePageState extends State<UserProfilePage> {
   String? _profileImagePath;
   bool _isEditing = false;
-  late TextEditingController _usernameController; // Use late to ensure it's initialized
+  late TextEditingController _usernameController;
+  late TextEditingController _addressController;
+  late TextEditingController _phoneController;
 
   @override
   void initState() {
     super.initState();
     _usernameController = TextEditingController();
+    _addressController = TextEditingController();
+    _phoneController = TextEditingController();
     _initializeProfile();
   }
 
   @override
   void dispose() {
     _usernameController.dispose();
+    _addressController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
   void _initializeProfile() {
-    // Check if 'info' and necessary properties are not null
     if (info != null && info!.userProfile[info!.uuid] != null) {
-      // If not loading, set the profile data
       if (info!.isLoading.value == false) {
         _profileImagePath = info!.userProfile[info!.uuid]!['profileImage'];
         File imageFile = File(_profileImagePath!);
@@ -43,23 +47,25 @@ class _UserProfilePageState extends State<UserProfilePage> {
           _profileImagePath = "assets/mainIcon.png";
         }
         _usernameController.text = info!.userProfile[info!.uuid]!['username'] ?? '';
-        setState(() {}); // Update the UI
+        _addressController.text = info!.userProfile[info!.uuid]!['address'] ?? '';
+        _phoneController.text = info!.userProfile[info!.uuid]!['number'] ?? '';
+        setState(() {});
       } else {
-        // Listen for changes in isLoading to initialize when data is loaded
         info!.isLoading.addListener(() {
           if (info!.isLoading.value == false) {
             _profileImagePath = info!.userProfile[info!.uuid]!['profileImage'];
             File imageFile = File(_profileImagePath!);
             if (!imageFile.existsSync()) {
-            _profileImagePath = "assets/mainIcon.png";
+              _profileImagePath = "assets/mainIcon.png";
             }
             _usernameController.text = info!.userProfile[info!.uuid]!['username'] ?? '';
-            setState(() {}); // Update the UI
+            _addressController.text = info!.userProfile[info!.uuid]!['address'] ?? '';
+            _phoneController.text = info!.userProfile[info!.uuid]!['number'] ?? '';
+            setState(() {});
           }
         });
       }
     } else {
-      // Handle the case where 'info' or 'userProfile' is null
       debugPrint('Info or user profile is null.');
     }
   }
@@ -77,7 +83,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
             info!.updateUserProfile(
               _usernameController.text,
               _profileImagePath!,
-              (info!.userProfile[info!.uuid]?['income'] ?? 0).toDouble(),
+              _addressController.text,
+              _phoneController.text,
             );
             imageCache.clear();
           });
@@ -107,16 +114,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void _saveProfile() {
-    if (_usernameController.text.isEmpty || _profileImagePath == null) {
+    if (_usernameController.text.isEmpty || _profileImagePath == null ) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Username and profile image cannot be empty.'), duration: Duration(seconds: 1)),
-      );
-      return;
-    }
-
-    if (info?.userProfile[info!.uuid] == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('User profile data is unavailable.'), duration: Duration(seconds: 1)),
+        SnackBar(content: Text('All fields are required.'), duration: Duration(seconds: 1)),
       );
       return;
     }
@@ -125,12 +125,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
       info!.updateUserProfile(
         _usernameController.text,
         _profileImagePath!,
-        info!.userProfile[info!.uuid]!['income'],
+        _addressController.text,
+        _phoneController.text,
       );
 
       setState(() {
         _isEditing = false;
-        info!.userProfile[info!.uuid]!['username'] = _usernameController.text;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -158,7 +158,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               backgroundColor: Colors.white,
               elevation: 0,
               title: const Text(
-                'HI🤗',
+                'Profile',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -191,9 +191,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   ? _profileImagePath!.contains('assets')
                                       ? AssetImage(_profileImagePath!) as ImageProvider
                                       : FileImage(File(_profileImagePath!))
-                                  : (info!.userProfile[info!.uuid]?['profileImage']?.contains('assets') ?? false)
-                                      ? AssetImage(info!.userProfile[info!.uuid]!['profileImage']) as ImageProvider
-                                      : FileImage(File(info!.userProfile[info!.uuid]!['profileImage'])),
+                                  : AssetImage("assets/mainIcon.png"),
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -205,7 +203,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   ),
                                 )
                               : Text(
-                                  info!.userProfile[info!.uuid]?['username'] ?? '',
+                                  _usernameController.text,
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -225,47 +223,41 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 5,
+                    _isEditing
+                        ? TextField(
+                            controller: _addressController,
+                            decoration: const InputDecoration(
+                              labelText: 'Address',
+                            ),
+                          )
+                        : _addressController.text.isEmpty ? ListTile(
+                              leading: Icon(Icons.warning, color: Colors.red),
+                              title: Text(
+                                'address not provided',
+                                style: TextStyle(color: Colors.redAccent),
+                              ),)
+                            : ListTile(
+                            title: const Text('Address'),
+                            subtitle: Text(_addressController.text),
                           ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          const Text(
-                            'Income',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey,
+                    const SizedBox(height: 10),
+                    _isEditing
+                        ? TextField(
+                            controller: _phoneController,
+                            decoration: const InputDecoration(
+                              labelText: 'Phone Number',
                             ),
+                          )
+                        : _phoneController.text.isEmpty ? ListTile(
+                              leading: Icon(Icons.warning, color: Colors.red),
+                              title: Text(
+                                'Number not provided',
+                                style: TextStyle(color: Colors.redAccent),
+                              ),)
+                            : ListTile(
+                            title: const Text('Phone Number'),
+                            subtitle: Text(_phoneController.text),
                           ),
-                          const SizedBox(height: 16),
-                          Row( 
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
-                                children:  [Text(
-                            '₹${info!.userProfile[info!.uuid]?['income'] ?? '0'}',
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                            ),
-                            ],
-                            )
-                        ],
-                      ),
-                    ),
                     const SizedBox(height: 20),
                     const Text(
                       'Account Settings',
@@ -300,48 +292,56 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget buildMenuItem(String title) {
     return GestureDetector(
       child: Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 5,
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 5,
             ),
-          ),
-          const Icon(Icons.arrow_forward_ios,color: Color.fromARGB(255, 246, 181, 40), size: 16),
-        ],
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            const Icon(Icons.arrow_forward_ios, size: 16),
+          ],
+        ),
       ),
-    ),
-    onTap: (){
-      switch (title) {
-        case "Change Password":{
-          Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => PasswordResetGuideWidget()));
-        } break;
-        case "FAQ":{
-          Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => FAQPage()));
-        } break;
-        case "Contact Us":{
-          Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ContactUsWidget()));
-        } break;
-    }
-    }
+      onTap: () {
+        if (title == 'Change Password') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PasswordResetGuideWidget(),
+            ),
+          );
+        } else if (title == 'FAQ') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FAQPage(),
+            ),
+          );
+        } else if (title == 'Contact Us') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ContactUsWidget(),
+            ),
+          );
+        }
+      },
     );
   }
 }

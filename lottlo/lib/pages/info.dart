@@ -66,13 +66,14 @@ class ItemInfo{
         userProfile[uuid!] = {
           'username': userProfileData['username'],
           'profileImage': userProfileData['profileImage'],
-          'income': userProfileData['income']
+          'address': userProfileData['address'],
+          'number': userProfileData['number']
         };
       } catch(e){
-        updateUserProfile("Unknown", "assets/mainIcon.png", 0.0);
+        updateUserProfile("Unknown", "assets/mainIcon.png", '','');
       }
     }else{
-      updateUserProfile("Unknown", "assets/mainIcon.png", 0.0);
+      updateUserProfile("Unknown", "assets/mainIcon.png", '','');
     }
 
   // Get all images
@@ -101,7 +102,13 @@ class ItemInfo{
     return userProfile[uuid]!['username'];
   }
   
-
+ bool checkHaveNumberOrAddress(){
+  print("Address: ${userProfile[uuid]!['address'].isNotEmpty}, Number: ${userProfile[uuid]!["number"].isNotEmpty}");
+  if (userProfile[uuid]!['address'].isNotEmpty && userProfile[uuid]!["number"].isNotEmpty){
+    return true;
+  } 
+  return false;
+ }
   void _setupListeners() {
     if (uuid != null) {
       // Listen to alert changes
@@ -130,20 +137,22 @@ class ItemInfo{
         return false;
       }
   }
-  Future<void> updateUserProfile(String username, String profileImage, double income) async {
+  Future<void> updateUserProfile(String username, String profileImage, String address, String number) async {
     if (uuid != null) {
       var userRef = _firestore.collection('users').doc(uuid);
       await userRef.set({
         'username': username,
         'profileImage': profileImage,
-        'income': income,
+        'address': address,
+        'number': number
       }, SetOptions(merge: true));
 
       // Update local data
       userProfile[uuid!] = {
         'username': username,
         'profileImage': profileImage,
-        'income': income,
+        'address': address,
+        'number':number
       };
     }
   }
