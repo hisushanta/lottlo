@@ -59,7 +59,7 @@ class ProductDetailsScreen extends StatelessWidget {
               Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(24),
-                  child: Image.asset(
+                  child: Image.network(
                     imageUrl,
                     fit: BoxFit.contain,
                   ),

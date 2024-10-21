@@ -9,7 +9,7 @@ class ItemInfo{
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Map<String,List<List>> itemInfo = {};
-  List<String> imageUrls = [];
+  Map<String,String> imageUrls = {};
   Map<String,List<List>> orderActiveStatus = {};
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(true); // To track loading state
   Map<String, Map<String, dynamic>> userProfile = {}; // New map for user profile
@@ -19,7 +19,7 @@ class ItemInfo{
   ItemInfo(this.uuid) {
     itemInfo[uuid!] = [];
     orderActiveStatus[uuid!] = [];
-    imageUrls = [];
+    imageUrls = {};
     userProfile[uuid!] = {}; // Initialize user profile
     _initializeData();
     // Initialize the data if have
@@ -79,8 +79,8 @@ class ItemInfo{
   // Get all images
   imageUrls = await getAllImageUrls();
   }
-  Future<List<String>> getAllImageUrls() async {
-    List<String> imageUrls = [];
+  Future<Map<String,String>> getAllImageUrls() async {
+    Map<String,String> imageUrls = {};
     
     try {
       // Reference to the folder in Firebase Storage
@@ -88,9 +88,11 @@ class ItemInfo{
       final ListResult result = await ref.listAll();
       
       for (final Reference fileRef in result.items) {
+        // print("Image Path: ${fileRef.fullPath}");
         String downloadUrl = await fileRef.getDownloadURL();
-        imageUrls.add(downloadUrl);
+        imageUrls[fileRef.fullPath] = downloadUrl;
       }
+      print("Image Urls: ${imageUrls}");
     } catch (e) {
       print('Error retrieving image URLs: $e');
     }
@@ -104,7 +106,6 @@ class ItemInfo{
   
  bool checkHaveNumberOrAddress(){
   
-  print("Address: ${userProfile[uuid]!['address'].isNotEmpty}, Number: ${userProfile[uuid]!["number"].isNotEmpty}");
   if (userProfile[uuid]!['address'].isNotEmpty && userProfile[uuid]!["number"].isNotEmpty){
     return true;
   } 

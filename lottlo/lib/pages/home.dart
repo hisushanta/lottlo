@@ -137,7 +137,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin{
                 children: [
                   if (info!.itemInfo.isNotEmpty)
                       for(var item in info!.itemInfo[userId]!)
-                        FoodCard(image: item[0], name: item[1], price: item[2], pindex: item[3],isize:item[4]['size'],ititle: item[5],idesc: item[6])
+                        FoodCard(image: info!.imageUrls[item[0]]!, name: item[1], price: item[2], pindex: item[3],isize:item[4]['size'],ititle: item[5],idesc: item[6])
                 ],
               ),
             ),
@@ -186,7 +186,7 @@ class FoodCard extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(16),
               ),
-              child: Image.asset(
+              child: Image.network(
                 image,
                 fit: BoxFit.fill,
                 height: double.infinity,

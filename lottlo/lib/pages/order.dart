@@ -61,8 +61,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     image: DecorationImage(
-                      image: AssetImage(widget.image),
-                      fit: BoxFit.cover,
+                      image: NetworkImage(widget.image),
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
