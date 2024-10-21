@@ -88,11 +88,9 @@ class ItemInfo{
       final ListResult result = await ref.listAll();
       
       for (final Reference fileRef in result.items) {
-        // print("Image Path: ${fileRef.fullPath}");
         String downloadUrl = await fileRef.getDownloadURL();
         imageUrls[fileRef.fullPath] = downloadUrl;
       }
-      print("Image Urls: ${imageUrls}");
     } catch (e) {
       print('Error retrieving image URLs: $e');
     }

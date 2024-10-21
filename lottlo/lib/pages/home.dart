@@ -194,14 +194,14 @@ class FoodCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(2.0),
+            padding: const EdgeInsets.all(1.0),
             child: Column(
               children: [
                 Text(
                   name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 1),
                 Center(child: Text(
                   price,
                   style:  TextStyle(color: Colors.grey[600]),
@@ -210,7 +210,7 @@ class FoodCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical:5,horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical:2,horizontal: 10),
          child:ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.lightGreen, 
