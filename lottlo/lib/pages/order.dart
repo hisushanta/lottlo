@@ -1,8 +1,7 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:lottlo/main.dart';
 
+// ignore: must_be_immutable
 class AddItemScreen extends StatefulWidget {
   final String name;
   final String price;
@@ -11,7 +10,9 @@ class AddItemScreen extends StatefulWidget {
   final List isize;
   final String ititle;
   final String idesc;
-  const AddItemScreen({
+  String updatePrice = "";
+
+  AddItemScreen({
     Key? key,
     required this.name,
     required this.price,
@@ -19,16 +20,22 @@ class AddItemScreen extends StatefulWidget {
     required this.pindex,
     required this.isize,
     required this.ititle,
-    required this.idesc
+    required this.idesc,
   }) : super(key: key);
 
   @override
   _AddItemScreenState createState() => _AddItemScreenState();
+  
 }
 
 class _AddItemScreenState extends State<AddItemScreen> {
   int selectedSizeIndex = 0;
-
+  int quantity = 1; // Quantity default value
+  
+  @override void initState() {
+    widget.updatePrice = widget.price;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,6 +119,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
+
                   // Size Selector Section
                   const Text(
                     "Available Sizes",
@@ -176,14 +184,66 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  
+
+                  // Quantity Selector
+                 // Quantity Selector with Enhanced Design
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Decrease quantity button
+                    IconButton(
+                      icon: Icon(Icons.remove_circle_outline, size: 30),
+                      onPressed: () {
+                        setState(() {
+                          if (quantity > 1) {
+                            quantity--;
+                            widget.updatePrice = "₹${double.parse(widget.price.split("₹")[1]) * quantity}";
+                          } else {
+                            widget.updatePrice = widget.price;
+                          }
+                        });
+                      },
+                      color: Colors.redAccent, // Add a contrasting color to highlight action
+                    ),
+                    // Quantity Display with Style
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.tealAccent.withOpacity(0.1), // Light background for quantity
+                        borderRadius: BorderRadius.circular(10), // Rounded corners
+                        border: Border.all(color: Colors.teal, width: 1.5), // Teal border
+                      ),
+                      child: Text(
+                        '$quantity',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.teal, // Text color to match the theme
+                        ),
+                      ),
+                    ),
+                    // Increase quantity button
+                    IconButton(
+                      icon: Icon(Icons.add_circle_outline, size: 30),
+                      onPressed: () {
+                        setState(() {
+                          quantity++;
+                          widget.updatePrice = "₹${double.parse(widget.price.split("₹")[1]) * quantity}";
+                        });
+                      },
+                      color: Colors.greenAccent, // Add a contrasting color to highlight action
+                    ),
+                  ],
+                ),
+
                   const SizedBox(height: 24),
+
                   // Price and Buy Button Section
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${widget.price}",
+                        widget.updatePrice,
                         style: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -201,23 +261,37 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           DateTime dateAfterThreeDays = now.add(Duration(days: 3));
                           String futureDate = "${dateAfterThreeDays.day}/${dateAfterThreeDays.month}/${dateAfterThreeDays.year}";
 
-                          if (info!.checkHaveNumberOrAddress()){
-                              info!.addOrder(widget.name,widget.image,widget.price,widget.pindex,info!.getUserName(),
-                                    info!.userProfile[info!.uuid]!['number'],"Order Confirmed",widget.isize[selectedSizeIndex],date,time,futureDate,'','');
-                              Navigator.pop(context);
-                            } else{
-                             ScaffoldMessenger.of(context).showSnackBar(
+                          if (info!.checkHaveNumberOrAddress()) {
+                            info!.addOrder(
+                              widget.name,
+                              widget.image,
+                              widget.price,
+                              widget.pindex,
+                              info!.getDetails('username'),
+                              info!.getDetails('number'),
+                              "Order Confirmed",
+                              widget.isize[selectedSizeIndex],
+                              date,
+                              time,
+                              futureDate,
+                              '',
+                              '',
+                              quantity.toString(), // Pass the quantity
+                              widget.updatePrice,
+                              info!.getDetails('address')
+                            );
+                            Navigator.pop(context);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text("Please Add The Address And Number"),
                                 duration: Duration(seconds: 1),
                                 backgroundColor: Colors.red,
                               ),
-                            ); 
-                            }
-                            
-                          },
-                        icon: const Icon(Icons.shopping_bag_outlined,
-                            color: Colors.white),
+                            );
+                          }
+                        },
+                        icon: const Icon(Icons.shopping_bag_outlined, color: Colors.white),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 32, vertical: 16),
@@ -246,7 +320,5 @@ class _AddItemScreenState extends State<AddItemScreen> {
         ),
       ),
     );
-      
   }
 }
-

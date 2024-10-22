@@ -66,6 +66,7 @@ class _WatchOrder extends State<WatchOrder> {
                                   item: order[0],
                                   number: order[5],
                                   price: order[2].replaceAll(" ", ""),
+                                  totalPrice: order[15].replaceAll(" ",""),
                                   size: '${order[6]}',
                                   bookingDate: order[9],
                                   bookingTime: order[10],
@@ -75,7 +76,7 @@ class _WatchOrder extends State<WatchOrder> {
                                   orderConfirmedDate: order[9],
                                   outForDeliveryDate: order[12],
                                   deliveredDate: order[13],
-                                  quantity: '1',
+                                  quantity: order[14],
                                 ),
                               ),
                             );
@@ -111,11 +112,21 @@ class _WatchOrder extends State<WatchOrder> {
                                     fontWeight: FontWeight.bold, fontSize: 18),
                               ),
                               subtitle: Text(
-                                'Size: ${order[6]} \nPrice: ${order[2].replaceAll(" ","")}',
+                                'Size: ${order[6]} \nPrice: ${order[2].replaceAll(" ","")} \nTotalPrice: ${order[15].replaceAll(" ","")}',
                                     
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.grey[700],
+                                ),
+                              ),
+                              trailing: Text(
+                                "Qty: ${order[14]}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: isActive=="Order Confirmed"
+                                      ? Colors.grey
+                                      : isActive == "Out for Delivery"? Colors.orange : Colors.green
                                 ),
                               ),
                             ),

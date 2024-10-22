@@ -98,9 +98,17 @@ class ItemInfo{
     return imageUrls;
   }
 
-  String getUserName(){
-    return userProfile[uuid]!['username'];
+
+  String getDetails(String checkToGet){
+    if (checkToGet == 'username'){
+      return userProfile[uuid]!['username'];
+    } else if( checkToGet == 'number'){
+      return userProfile[uuid]!['number'];
+    } else{
+      return userProfile[uuid]!['address'];
+    }
   }
+  
   
  bool checkHaveNumberOrAddress(){
   
@@ -172,7 +180,7 @@ class ItemInfo{
 
   void addOrder(String itemName,String image, String price,String pindex, String userName,  String number,
                 String status, String size ,String date, String time, String expactedDate,
-                String outForOrderDate, String DeliveredDate
+                String outForOrderDate, String DeliveredDate, String quantity,String totalPrice,String deliveryAddress
                   ){
       int aindex = 0;
       if (orderActiveStatus[uuid]!.isNotEmpty){
@@ -185,7 +193,7 @@ class ItemInfo{
       }
 
       _saveOrderToFirestore({"$aindex":[itemName,image,price,pindex,userName,number,size,status,aindex.toString(),date,time,expactedDate,
-                            outForOrderDate,DeliveredDate]}, aindex.toString());
+                            outForOrderDate,DeliveredDate,quantity,totalPrice,deliveryAddress]}, aindex.toString());
   }
 
 }

@@ -5,6 +5,7 @@ class ProductDetailsScreen extends StatelessWidget {
   final String item;
   final String number;
   final String price;
+  final String totalPrice;
   final String size;
   final String bookingDate;
   final String bookingTime;
@@ -22,6 +23,7 @@ class ProductDetailsScreen extends StatelessWidget {
     required this.item,
     required this.number,
     required this.price,
+    required this.totalPrice,
     required this.size,
     required this.bookingDate,
     required this.bookingTime,
@@ -65,11 +67,15 @@ class ProductDetailsScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height:16),
+              Center(
+                child: Text(item,style:  TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+              ),
               const SizedBox(height: 20),
               _buildDetailCard('User', user),
-              _buildDetailCard('Item', item),
               _buildDetailCard('Number', number),
-              _buildDetailCard('Price', price, isPrice: true),
+              _buildDetailCard('Item Price', price, isPrice: true),
+              _buildDetailCard('Total Price', totalPrice, isPrice: true),
               _buildDetailCard('Size', size),
               _buildDetailCard('Quantity', quantity),
               _buildDetailCard('Date of Purchase', bookingDate),
