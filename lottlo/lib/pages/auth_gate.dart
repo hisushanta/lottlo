@@ -39,8 +39,8 @@ class AuthGate extends StatelessWidget {
                return Padding(
                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                  child: action == AuthAction.signIn
-                     ? const Text('Welcome to Kachra-Wala App, please sign in!')
-                     : const Text('Welcome to Kachra-Wala App, please sign up!'),
+                     ? const Text('Welcome to Lottlo Fashion App, please sign in!')
+                     : const Text('Welcome to Lottlo Fashion App, please sign up!'),
                );
              },
              footerBuilder: (context, action) {

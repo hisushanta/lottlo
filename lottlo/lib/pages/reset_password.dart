@@ -31,7 +31,7 @@ class PasswordResetGuideWidget extends StatelessWidget {
         child: ListView(
           children: [
             const Text(
-              'Resetting Your Password in Kachra Wala App',
+              'Resetting Your Password in Lottlo App',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
@@ -41,7 +41,7 @@ class PasswordResetGuideWidget extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             _buildStep(
-              '1. Open the Kachra Wala App',
+              '1. Open the Lottlo App',
               'Launch the Kachra Wala app on your smartphone.',
               Icons.phone_android_rounded,
             ),
@@ -57,7 +57,7 @@ class PasswordResetGuideWidget extends StatelessWidget {
             ),
             _buildStep(
               '4. Check Your Email',
-              'Look for an email from Kachra Wala with a password reset link.',
+              'Look for an email from Lottlo with a password reset link.',
               Icons.mail_outline_rounded,
             ),
             _buildStep(
@@ -72,7 +72,7 @@ class PasswordResetGuideWidget extends StatelessWidget {
             ),
             _buildStep(
               '7. Login with New Password',
-              'Return to the Kachra Wala app and log in using your new password.',
+              'Return to the Lottlo app and log in using your new password.',
               Icons.login_rounded,
             ),
             const SizedBox(height: 30),
