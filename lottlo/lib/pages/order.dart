@@ -31,6 +31,8 @@ class AddItemScreen extends StatefulWidget {
 class _AddItemScreenState extends State<AddItemScreen> {
   int selectedSizeIndex = 0;
   int quantity = 1;
+  Icon iconb = Icon(Icons.favorite_border,color: Colors.black,);
+  bool likeOrNot = false;
 
   @override
   void initState() {
@@ -133,8 +135,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.favorite_border, color: Colors.black),
+            icon: iconb,
             onPressed: () {
+              setState(() {
+                if (likeOrNot){
+                    iconb = Icon(Icons.favorite_border,color:Colors.black);
+                    likeOrNot = false;
+                } else{
+                  iconb = Icon(Icons.favorite_rounded,color:Colors.red);
+                  likeOrNot = true;
+                }
+              });
               // Handle favorite action
             },
           ),
