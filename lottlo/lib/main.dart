@@ -1,7 +1,6 @@
 import 'package:lottlo/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:lottlo/pages/third_page.dart';
 import 'pages/auth_gate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'pages/home.dart';
@@ -15,8 +14,8 @@ void main() async {
  WidgetsFlutterBinding.ensureInitialized();
  await Firebase.initializeApp(
    options: DefaultFirebaseOptions.currentPlatform,
- );
- 
+ );  
+
   runApp(
 
     const MyApp());

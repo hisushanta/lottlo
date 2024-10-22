@@ -12,6 +12,12 @@ class WatchOrder extends StatefulWidget {
 class _WatchOrder extends State<WatchOrder> {
    Map<String, List<List>> orders = info!.orderActiveStatus;
   
+  void cancelOrder(String itemPositionInCloude,int itemPositionInLocally) async {
+    setState(() {
+      info!.removeOrderFromFirestore(itemPositionInCloude,itemPositionInLocally);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
@@ -65,6 +71,7 @@ class _WatchOrder extends State<WatchOrder> {
                                   user: order[4],
                                   itemPositionInCloude: order[8],
                                   itemPositionInLocally: index,
+                                  removeOrder: (itemPositionInCloude,itemPositionInLocally) => cancelOrder(itemPositionInCloude,itemPositionInLocally),
                                   item: order[0],
                                   number: order[5],
                                   price: order[2].replaceAll(" ", ""),

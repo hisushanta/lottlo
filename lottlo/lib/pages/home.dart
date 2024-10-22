@@ -98,8 +98,8 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin{
         backgroundColor: Colors.white,
         title: const Center(
           child: Text(
-            "Kachra Wala",
-            style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
+            "Lottlo",
+            style: TextStyle(fontStyle: FontStyle.italic,fontWeight: FontWeight.bold,color: Colors.black),
           ),
         ),
       ),

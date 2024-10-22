@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>715833886581-hve1v2blsvubgbepoqe4hn2ti3o1oi1f.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.715833886581-hve1v2blsvubgbepoqe4hn2ti3o1oi1f</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>715833886581-iumvtqokoupoa0vpgf8403fmjbpacnco.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +11,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>lottlo.wala.app</string>
+	<string>lottlo.fashion.app</string>
 	<key>PROJECT_ID</key>
 	<string>lottlo</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +27,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:715833886581:ios:e54f88ceced66e63f6353c</string>
+	<string>1:715833886581:ios:80b11e18e2326fe7f6353c</string>
 </dict>
 </plist>

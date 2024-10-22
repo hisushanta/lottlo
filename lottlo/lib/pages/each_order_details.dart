@@ -5,6 +5,7 @@ class ProductDetailsScreen extends StatelessWidget {
   final String user;
   final String itemPositionInCloude;
   final int itemPositionInLocally;
+  final Function(String,int) removeOrder;
   final String item;
   final String number;
   final String price;
@@ -25,6 +26,7 @@ class ProductDetailsScreen extends StatelessWidget {
     required this.user,
     required this.itemPositionInCloude,
     required this.itemPositionInLocally,
+    required this.removeOrder,
     required this.item,
     required this.number,
     required this.price,
@@ -260,7 +262,7 @@ class ProductDetailsScreen extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: canCancel
             ? () {
-                info!.removeOrderFromFirestore(itemPositionInCloude,itemPositionInLocally);
+                removeOrder(itemPositionInCloude,itemPositionInLocally);
                 Navigator.of(context).pop();
                 // Logic to cancel the order
                 ScaffoldMessenger.of(context).showSnackBar(
