@@ -36,7 +36,7 @@ class FAQPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             _buildFAQItem(
-              question: 'What is the Kachra Wala app?',
+              question: 'What is the Lottlo app?',
               answer:
                   'Kachra Wala is a waste management app that helps you stay informed about waste collection schedules, recycling tips, and other waste-related services in your area.',
             ),

@@ -9,7 +9,7 @@ class ItemInfo{
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Map<String,List<List>> itemInfo = {};
-  List<String> imageUrls = [];
+  Map<String,String> imageUrls = {};
   Map<String,List<List>> orderActiveStatus = {};
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(true); // To track loading state
   Map<String, Map<String, dynamic>> userProfile = {}; // New map for user profile
@@ -19,7 +19,7 @@ class ItemInfo{
   ItemInfo(this.uuid) {
     itemInfo[uuid!] = [];
     orderActiveStatus[uuid!] = [];
-    imageUrls = [];
+    imageUrls = {};
     userProfile[uuid!] = {}; // Initialize user profile
     _initializeData();
     // Initialize the data if have
@@ -79,8 +79,8 @@ class ItemInfo{
   // Get all images
   imageUrls = await getAllImageUrls();
   }
-  Future<List<String>> getAllImageUrls() async {
-    List<String> imageUrls = [];
+  Future<Map<String,String>> getAllImageUrls() async {
+    Map<String,String> imageUrls = {};
     
     try {
       // Reference to the folder in Firebase Storage
@@ -89,7 +89,7 @@ class ItemInfo{
       
       for (final Reference fileRef in result.items) {
         String downloadUrl = await fileRef.getDownloadURL();
-        imageUrls.add(downloadUrl);
+        imageUrls[fileRef.fullPath] = downloadUrl;
       }
     } catch (e) {
       print('Error retrieving image URLs: $e');
@@ -98,13 +98,20 @@ class ItemInfo{
     return imageUrls;
   }
 
-  String getUserName(){
-    return userProfile[uuid]!['username'];
+
+  String getDetails(String checkToGet){
+    if (checkToGet == 'username'){
+      return userProfile[uuid]!['username'];
+    } else if( checkToGet == 'number'){
+      return userProfile[uuid]!['number'];
+    } else{
+      return userProfile[uuid]!['address'];
+    }
   }
+  
   
  bool checkHaveNumberOrAddress(){
   
-  print("Address: ${userProfile[uuid]!['address'].isNotEmpty}, Number: ${userProfile[uuid]!["number"].isNotEmpty}");
   if (userProfile[uuid]!['address'].isNotEmpty && userProfile[uuid]!["number"].isNotEmpty){
     return true;
   } 
@@ -158,6 +165,22 @@ class ItemInfo{
     }
   }
 
+  // Method to remove an order from Firestore
+Future<void> removeOrderFromFirestore(String orderId,int index) async {
+  if (uuid != null) {
+    //first locally delete:
+    orderActiveStatus[uuid]!.removeAt(index);
+    // Access the Firestore collection for the user's orders
+    var docRef = _firestore
+        .collection('users')
+        .doc(uuid)
+        .collection('order')
+        .doc(orderId);
+
+    // Delete the order document
+    await docRef.delete();
+  }
+}
 
   Future<void> _saveOrderToFirestore(Map<String,List> order,String index) async {
     if (uuid != null) {
@@ -173,7 +196,7 @@ class ItemInfo{
 
   void addOrder(String itemName,String image, String price,String pindex, String userName,  String number,
                 String status, String size ,String date, String time, String expactedDate,
-                String outForOrderDate, String DeliveredDate
+                String outForOrderDate, String DeliveredDate, String quantity,String totalPrice,String deliveryAddress
                   ){
       int aindex = 0;
       if (orderActiveStatus[uuid]!.isNotEmpty){
@@ -186,7 +209,7 @@ class ItemInfo{
       }
 
       _saveOrderToFirestore({"$aindex":[itemName,image,price,pindex,userName,number,size,status,aindex.toString(),date,time,expactedDate,
-                            outForOrderDate,DeliveredDate]}, aindex.toString());
+                            outForOrderDate,DeliveredDate,quantity,totalPrice,deliveryAddress]}, aindex.toString());
   }
 
 }

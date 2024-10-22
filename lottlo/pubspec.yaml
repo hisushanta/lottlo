@@ -69,20 +69,8 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/copper.png
-    - assets/pital.png
-    - assets/metal.png
-    - assets/newspaper.png
+   
     - assets/mainIcon.png
-    - assets/aluminium.jpg
     - assets/mainPage.png
-    - assets/steel.jpg
-    - assets/plastic.png
-    - assets/cartoon.png
-    - assets/woman_hair.png
-    - assets/mixitem.png
     - assets/splashIcon.png
     - assets/authIcon.png
-    - assets/shifting.png
-    - assets/E_Waste.png
-    - assets/furniture.png

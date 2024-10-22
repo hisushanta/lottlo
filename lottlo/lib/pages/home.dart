@@ -98,8 +98,8 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin{
         backgroundColor: Colors.white,
         title: const Center(
           child: Text(
-            "Kachra Wala",
-            style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
+            "Lottlo",
+            style: TextStyle(fontStyle: FontStyle.italic,fontWeight: FontWeight.bold,color: Colors.black),
           ),
         ),
       ),
@@ -137,7 +137,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin{
                 children: [
                   if (info!.itemInfo.isNotEmpty)
                       for(var item in info!.itemInfo[userId]!)
-                        FoodCard(image: item[0], name: item[1], price: item[2], pindex: item[3],isize:item[4]['size'],ititle: item[5],idesc: item[6])
+                        FoodCard(image: info!.imageUrls[item[0]]!, name: item[1], price: item[2], pindex: item[3],isize:item[4]['size'],ititle: item[5],idesc: item[6])
                 ],
               ),
             ),
@@ -186,7 +186,7 @@ class FoodCard extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(16),
               ),
-              child: Image.asset(
+              child: Image.network(
                 image,
                 fit: BoxFit.fill,
                 height: double.infinity,
@@ -194,14 +194,14 @@ class FoodCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(2.0),
+            padding: const EdgeInsets.all(1.0),
             child: Column(
               children: [
                 Text(
                   name,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 1),
                 Center(child: Text(
                   price,
                   style:  TextStyle(color: Colors.grey[600]),
@@ -210,7 +210,7 @@ class FoodCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical:5,horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical:2,horizontal: 10),
          child:ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.lightGreen, 
