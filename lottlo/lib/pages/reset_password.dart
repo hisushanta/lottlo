@@ -42,7 +42,7 @@ class PasswordResetGuideWidget extends StatelessWidget {
             const SizedBox(height: 30),
             _buildStep(
               '1. Open the Lottlo App',
-              'Launch the Kachra Wala app on your smartphone.',
+              'Launch the Lottlo app on your smartphone.',
               Icons.phone_android_rounded,
             ),
             _buildStep(
