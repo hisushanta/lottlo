@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lottlo/main.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final String user;
+  final String itemPositionInCloude;
+  final int itemPositionInLocally;
   final String item;
   final String number;
   final String price;
@@ -12,14 +15,16 @@ class ProductDetailsScreen extends StatelessWidget {
   final String estimatedDeliveryDate;
   final String status;
   final String imageUrl;
-  final String orderConfirmedDate; // New parameter for order confirmed date
-  final String outForDeliveryDate; // New parameter for out for delivery date
-  final String deliveredDate; // New parameter for delivered date
+  final String orderConfirmedDate;
+  final String outForDeliveryDate;
+  final String deliveredDate;
   final String quantity;
 
   const ProductDetailsScreen({
     Key? key,
     required this.user,
+    required this.itemPositionInCloude,
+    required this.itemPositionInLocally,
     required this.item,
     required this.number,
     required this.price,
@@ -30,17 +35,17 @@ class ProductDetailsScreen extends StatelessWidget {
     required this.estimatedDeliveryDate,
     required this.status,
     required this.imageUrl,
-    required this.orderConfirmedDate, // Pass the order confirmed date here
-    required this.outForDeliveryDate, // Pass the out for delivery date here
-    required this.deliveredDate, // Pass the delivered date here
-    required this.quantity
+    required this.orderConfirmedDate,
+    required this.outForDeliveryDate,
+    required this.deliveredDate,
+    required this.quantity,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('$item Details', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text('$item Details', style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
@@ -67,9 +72,12 @@ class ProductDetailsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height:16),
+              const SizedBox(height: 16),
               Center(
-                child: Text(item,style:  TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                child: Text(
+                  item,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
               const SizedBox(height: 20),
               _buildDetailCard('User', user),
@@ -82,7 +90,9 @@ class ProductDetailsScreen extends StatelessWidget {
               _buildDetailCard('Est. Delivery Date', estimatedDeliveryDate),
               _buildStatusCard('Status', status),
               const SizedBox(height: 20),
-              _buildDeliveryTimeline(), // Pass delivery dates here
+              _buildDeliveryTimeline(),
+              const SizedBox(height: 20),
+              _buildCancelOrderButton(context), // Add cancel order button
             ],
           ),
         ),
@@ -104,7 +114,7 @@ class ProductDetailsScreen extends StatelessWidget {
           children: [
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.blueAccent,
@@ -125,7 +135,11 @@ class ProductDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildStatusCard(String title, String value) {
-    Color statusColor = value == 'Order Confirmed' ? Colors.grey : value == "Delivered" ? Colors.green : Colors.orange;
+    Color statusColor = value == 'Order Confirmed'
+        ? Colors.grey
+        : value == 'Delivered'
+            ? Colors.green
+            : Colors.orange;
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
@@ -160,11 +174,8 @@ class ProductDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildDeliveryTimeline() {
-    // Delivery steps
     List<String> steps = ['Order Confirmed', 'Out for Delivery', 'Delivered'];
-    // Corresponding delivery dates
     List<String> deliveryDates = [orderConfirmedDate, outForDeliveryDate, deliveredDate];
-    // Get the index of the current status
     int currentIndex = steps.indexOf(status);
 
     return Column(
@@ -196,8 +207,8 @@ class ProductDetailsScreen extends StatelessWidget {
                   ),
                   child: Center(
                     child: isActive
-                        ? Icon(Icons.check, color: Colors.white, size: 18)
-                        : Icon(Icons.circle, color: Colors.grey, size: 18),
+                        ? const Icon(Icons.check, color: Colors.white, size: 18)
+                        : const Icon(Icons.circle, color: Colors.grey, size: 18),
                   ),
                 ),
                 const SizedBox(height: 5),
@@ -210,11 +221,11 @@ class ProductDetailsScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  deliveryDates[index], // Display delivery date under each step
+                  deliveryDates[index],
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: isActive ? Colors.green : Colors.grey,
-                    fontSize: 14, // Slightly smaller font for date
+                    fontSize: 14,
                   ),
                 ),
               ],
@@ -241,4 +252,39 @@ class ProductDetailsScreen extends StatelessWidget {
       ],
     );
   }
+
+  Widget _buildCancelOrderButton(BuildContext context) {
+    bool canCancel = status != 'Delivered'; // Allow cancellation only if not delivered
+
+    return Center(
+      child: ElevatedButton.icon(
+        onPressed: canCancel
+            ? () {
+                info!.removeOrderFromFirestore(itemPositionInCloude,itemPositionInLocally);
+                Navigator.of(context).pop();
+                // Logic to cancel the order
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Order cancelled successfully')),
+                );
+
+                // _showCancelConfirmationDialog(context);
+              }
+            : null,
+        icon: const Icon(Icons.cancel),
+        label: const Text(
+          'Cancel Order',
+          style: TextStyle(fontSize: 18,color: Colors.red),
+        ),
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          iconColor: canCancel ? Colors.redAccent : Colors.grey,
+          backgroundColor: Colors.indigo[50],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
+    );
+  }
+
 }

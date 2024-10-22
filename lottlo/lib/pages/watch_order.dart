@@ -10,8 +10,8 @@ class WatchOrder extends StatefulWidget {
 }
 
 class _WatchOrder extends State<WatchOrder> {
-  final Map<String, List<List>> orders = info!.orderActiveStatus;
-
+   Map<String, List<List>> orders = info!.orderActiveStatus;
+  
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
@@ -63,6 +63,8 @@ class _WatchOrder extends State<WatchOrder> {
                               MaterialPageRoute(
                                 builder: (context) => ProductDetailsScreen(
                                   user: order[4],
+                                  itemPositionInCloude: order[8],
+                                  itemPositionInLocally: index,
                                   item: order[0],
                                   number: order[5],
                                   price: order[2].replaceAll(" ", ""),

@@ -165,6 +165,22 @@ class ItemInfo{
     }
   }
 
+  // Method to remove an order from Firestore
+Future<void> removeOrderFromFirestore(String orderId,int index) async {
+  if (uuid != null) {
+    //first locally delete:
+    orderActiveStatus[uuid]!.removeAt(index);
+    // Access the Firestore collection for the user's orders
+    var docRef = _firestore
+        .collection('users')
+        .doc(uuid)
+        .collection('order')
+        .doc(orderId);
+
+    // Delete the order document
+    await docRef.delete();
+  }
+}
 
   Future<void> _saveOrderToFirestore(Map<String,List> order,String index) async {
     if (uuid != null) {

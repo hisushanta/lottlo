@@ -199,7 +199,7 @@ class FoodCard extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 1),
                 Center(child: Text(
