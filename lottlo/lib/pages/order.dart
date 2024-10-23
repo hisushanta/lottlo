@@ -37,6 +37,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
   @override
   void initState() {
     widget.updatePrice = widget.price;
+    if (info!.checkLoveHave(widget.pindex)){
+      iconb = Icon(Icons.favorite_rounded,color: Colors.red,);
+      likeOrNot = true;
+    } else{
+      likeOrNot = false;
+    }
     super.initState();
   }
 
@@ -138,11 +144,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
             icon: iconb,
             onPressed: () {
               setState(() {
-                if (likeOrNot){
+                if (likeOrNot ){
                     iconb = Icon(Icons.favorite_border,color:Colors.black);
+                    info!.removeLoveFromFirestore(widget.pindex);
                     likeOrNot = false;
                 } else{
                   iconb = Icon(Icons.favorite_rounded,color:Colors.red);
+                  info!.addLove(widget.image, widget.name, widget.price, widget.pindex, widget.isize, widget.ititle, widget.idesc);
                   likeOrNot = true;
                 }
               });
