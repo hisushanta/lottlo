@@ -160,9 +160,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               title: const Text(
                 'Profile',
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,fontWeight: FontWeight.bold,color: Colors.black
                 ),
               ),
               centerTitle: true,

@@ -32,9 +32,7 @@ class _WatchOrder extends State<WatchOrder> {
               title: const Text(
                 "Your's Order",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Colors.black,
+                  fontStyle: FontStyle.italic,fontWeight: FontWeight.bold,color: Colors.black
                 ),
               ),
               backgroundColor: Colors.white,
