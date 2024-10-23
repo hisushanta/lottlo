@@ -60,14 +60,17 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.shopping_basket_sharp),
+            selectedIcon: Icon(Icons.shopping_basket_sharp),
+            icon: Icon(Icons.shopping_basket_outlined),
             label: 'Book',
           ),
           NavigationDestination(
-            icon: Icon(Icons.favorite_rounded),
+            selectedIcon: Icon(Icons.favorite_rounded),
+            icon: Icon(Icons.favorite_outline),
             label: 'Love',
           ),
           NavigationDestination(
+            selectedIcon: Icon(Icons.account_box),
             icon: Icon(Icons.account_box_outlined),
             label: 'About',
           ),
