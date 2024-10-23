@@ -46,13 +46,13 @@ dev_dependencies:
   flutter_native_splash: ^2.4.1
 
 flutter_native_splash:
-  color: "#5ce1e6"
+  color: "#ffffff"
   image: "assets/splashIcon.png"
   android: true
   ios: true
 
   android_12:
-    color: "#5ce1e6"
+    color: "#ffffff"
     image: "assets/splashIcon.png"
 
 # For information on the generic Dart part of this file, see the
