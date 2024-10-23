@@ -101,16 +101,18 @@ class _WatchOrder extends State<WatchOrder> {
                                       : isActive == "Out for Delivery"? Colors.orange : Colors.green),
                             ),
                             child: ListTile(
-                              leading: CircleAvatar(
-                                radius: 24,
-                                backgroundColor: isActive=="Order Confirmed"
-                                      ? Colors.grey[50]
-                                      : isActive == "Out for Delivery"? Colors.orange[50] : Colors.green[50],
-                                child: Icon(
-                                  Icons.watch,
-                                  color: isActive=="Order Confirmed"
-                                      ? Colors.grey
-                                      : isActive == "Out for Delivery"? Colors.orange : Colors.green
+                              leading:  ClipRRect(
+                                borderRadius: BorderRadius.circular(15.0),
+                                child: Image.network(
+                                  order[1], // Item image URL
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.fill,
+                                  errorBuilder: (context, error, stackTrace) => Icon(
+                                    Icons.error,
+                                    size: 50,
+                                    color: Colors.red,
+                                  ),
                                 ),
                               ),
                               title: Text(
