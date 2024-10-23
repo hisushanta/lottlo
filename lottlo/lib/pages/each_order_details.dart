@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottlo/main.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final String user;

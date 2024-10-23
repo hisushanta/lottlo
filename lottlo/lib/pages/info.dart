@@ -11,6 +11,7 @@ class ItemInfo{
   Map<String,List<List>> itemInfo = {};
   Map<String,String> imageUrls = {};
   Map<String,List<List>> orderActiveStatus = {};
+  Map<String,List<List>> loveItem = {};
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(true); // To track loading state
   Map<String, Map<String, dynamic>> userProfile = {}; // New map for user profile
   List<String> scrabItem = ["Copper","Aluminium","Pital","Steel","Metal","News Paper","Card Board","Plastic"];
@@ -19,6 +20,7 @@ class ItemInfo{
   ItemInfo(this.uuid) {
     itemInfo[uuid!] = [];
     orderActiveStatus[uuid!] = [];
+    loveItem[uuid!] = [];
     imageUrls = {};
     userProfile[uuid!] = {}; // Initialize user profile
     _initializeData();
@@ -41,6 +43,21 @@ class ItemInfo{
       }
       itemInfo[uuid!] = itemStore;
     }
+     // Love order store 
+     var loveData = await _firestore.collection('users').doc(uuid).collection('love').get();
+     var baseLoveData = loveData.docs.map((doc){
+      var ddata = doc.data();
+      return ddata;
+     }).toList();
+     if (baseLoveData.isNotEmpty){
+      List<List> ddlove = [];
+      for (var i in (List.generate( baseLoveData.length, (i) => i))){
+        for (var key in baseLoveData[i].keys){
+          ddlove.add(baseLoveData[i][key]);
+        }
+      }
+      loveItem[uuid!] = ddlove;
+     }
 
     // Active order get
     var orderActive = await _firestore.collection('users').doc(uuid).collection('order').get();
@@ -131,11 +148,29 @@ class ItemInfo{
             for (var key in item[i].keys){
             damOrder.add(item[i][key]);
             }
-            
           }
           orderActiveStatus[uuid!] = damOrder;
         }
       });
+
+      // love to load
+      _firestore.collection('users').doc(uuid).collection('love').snapshots().listen((snapshot){
+          var baseLoveData = snapshot.docs.map((doc){
+          var ddata = doc.data();
+          return ddata;
+        }).toList();
+        if (baseLoveData.isNotEmpty){
+          List<List> ddlove = [];
+          for (var i in (List.generate( baseLoveData.length, (i) => i))){
+            for (var key in baseLoveData[i].keys){
+              ddlove.add(baseLoveData[i][key]);
+            }
+          }
+          loveItem[uuid!] = ddlove;
+        }
+      });
+     
+      
     }
   }
   bool itemCheck(List<String>listOfItem,String itemName){
@@ -182,6 +217,20 @@ Future<void> removeOrderFromFirestore(String orderId,int index) async {
   }
 }
 
+Future<void> removeLoveFromFirestore(String loveId) async{
+  if (uuid != null){
+    var docRef = _firestore
+        .collection('users')
+        .doc(uuid)
+        .collection('love')
+        .doc(loveId);
+    
+    //Delete the love document
+    await docRef.delete();
+  }
+}
+
+
   Future<void> _saveOrderToFirestore(Map<String,List> order,String index) async {
     if (uuid != null) {
       var docRef = _firestore
@@ -192,6 +241,33 @@ Future<void> removeOrderFromFirestore(String orderId,int index) async {
 
       await docRef.set(order);
     }
+  }
+
+  Future<void> _saveLoveToFirestore(Map<String,List> item , String index) async{
+    if (uuid != null){
+      var docRef = _firestore
+          .collection('users')
+          .doc(uuid)
+          .collection('love')
+          .doc(index);
+      
+      await docRef.set(item);
+    }
+  }
+  
+  bool checkLoveHave(String pindex){
+    for (var item in loveItem[uuid!]!){
+      if (item[3] == pindex){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void addLove(String image,String itemName, String price,String pindex,List iSize,String iTitle,String idesc){
+
+    _saveLoveToFirestore({"$pindex":[image,itemName,price,pindex,iTitle,idesc,{"isize":iSize}]},pindex.toString());
+
   }
 
   void addOrder(String itemName,String image, String price,String pindex, String userName,  String number,
