@@ -228,15 +228,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                               labelText: 'Address',
                             ),
                           )
-                        : _addressController.text.isEmpty ? ListTile(
-                              leading: Icon(Icons.warning, color: Colors.red),
-                              title: Text(
-                                'address not provided',
-                                style: TextStyle(color: Colors.redAccent),
-                              ),)
-                            : ListTile(
-                            title: const Text('Address'),
-                            subtitle: Text(_addressController.text),
+                        : _buildCustomDisplayTile(
+                            title: 'Address',
+                            content: _addressController.text.isEmpty
+                                ? 'Address not provided'
+                                : _addressController.text,
+                            icon: Icons.home,
                           ),
                     const SizedBox(height: 10),
                     _isEditing
@@ -246,15 +243,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                               labelText: 'Phone Number',
                             ),
                           )
-                        : _phoneController.text.isEmpty ? ListTile(
-                              leading: Icon(Icons.warning, color: Colors.red),
-                              title: Text(
-                                'Number not provided',
-                                style: TextStyle(color: Colors.redAccent),
-                              ),)
-                            : ListTile(
-                            title: const Text('Phone Number'),
-                            subtitle: Text(_phoneController.text),
+                        : _buildCustomDisplayTile(
+                            title: 'Phone Number',
+                            content: _phoneController.text.isEmpty
+                                ? 'Number not provided'
+                                : _phoneController.text,
+                            icon: Icons.phone,
                           ),
                     const SizedBox(height: 20),
                     const Text(
@@ -287,37 +281,34 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 
-  Widget buildMenuItem(String title) {
-    return GestureDetector(
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 5,
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            const Icon(Icons.arrow_forward_ios, size: 16),
-          ],
+  Widget _buildCustomDisplayTile({required String title, required String content, required IconData icon}) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.blueAccent),
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
         ),
       ),
+      subtitle: Text(
+        content,
+        style: TextStyle(
+          color: content.contains('not provided') ? Colors.red : Colors.black87,
+        ),
+      ),
+      tileColor: Colors.grey[200],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
+
+  Widget buildMenuItem(String title) {
+    return GestureDetector(
       onTap: () {
-        if (title == 'Change Password') {
+        // Add navigation or logic here
+         if (title == 'Change Password') {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -340,6 +331,35 @@ class _UserProfilePageState extends State<UserProfilePage> {
           );
         }
       },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 3,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            const Spacer(),
+            const Icon(Icons.arrow_forward_ios, size: 16),
+          ],
+        ),
+      ),
     );
   }
 }
