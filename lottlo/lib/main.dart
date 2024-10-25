@@ -46,11 +46,8 @@ class _MyHomePageState extends State<MyHomePage> {
       stream: _auth.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData){
-          info = ItemInfo(snapshot.data!.uid);
-          
+          info = ItemInfo(snapshot.data!.uid);  
           return const Home();
-
-          
         }
         else{
           return Scaffold(

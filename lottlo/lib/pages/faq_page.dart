@@ -8,18 +8,34 @@ class FAQPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 69, 91, 102),
-        title: const Text(
-          'Frequently Asked Questions',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 18.0),
+        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/homeIcon.png',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: 4),
+            const Text(
+              "Lottlo",
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
         ),
         centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.black,),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: const Color.fromARGB(255, 255, 255, 255)), // Customize this icon
-          onPressed: () {
-            Navigator.pop(context); // Navigate back when the button is pressed
-          }),
-        elevation: 0,
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        elevation: 3,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
