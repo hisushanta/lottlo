@@ -5,7 +5,13 @@ import 'package:lottlo/main.dart';
 class LovePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ValueListenableBuilder<bool>(
+      valueListenable: info!.isLoading,
+      builder: (context, isLoading, _) {
+        if (isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else { 
+          return Scaffold(
       appBar: AppBar(
         title: const Center(
           child:Text(
@@ -17,7 +23,10 @@ class LovePage extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       backgroundColor: Colors.white,
-      body: Padding(
+      body: info!.loveItem[info!.uuid]!.isEmpty?
+         const Center(child: Text("No favorite items found"))
+      
+      : Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
         child: ListView.builder(
           itemCount: info!.loveItem[info!.uuid]!.length,
@@ -148,4 +157,7 @@ class LovePage extends StatelessWidget {
       ),
     );
   }
+      },
+    );
+      }
 }

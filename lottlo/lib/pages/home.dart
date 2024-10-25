@@ -82,97 +82,137 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+
 class BaseHome extends StatefulWidget {
   @override
   HomePageBar createState() => HomePageBar();
 }
 
-class HomePageBar extends State<BaseHome> with TickerProviderStateMixin{
-  @override void initState() {
+class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
+  final TextEditingController _searchController = TextEditingController();
+  List<List> _filteredItems = [];
+  List<List> _allItems = [];
+
+  @override
+  void initState() {
     super.initState();
+    _searchController.addListener(_onSearchChanged);
+    // Initialize data if already available
+    if (info?.itemInfo[userId]?.isNotEmpty ?? false) {
+      _allItems = info!.itemInfo[userId] ?? [];
+      _filteredItems = _allItems;
+    }
   }
 
+  void _onSearchChanged() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredItems = _allItems.where((item) {
+        final name = item[1].toString().toLowerCase();
+        return name.contains(query);
+      }).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: info!.isLoading,
-      builder: (context, isLoading, _) {
-        if (isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else {
-          return Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min, // Ensures it takes only as much space as needed
-                children: [
-                  Image.asset(
-                    'assets/homeIcon.png', // Replace with your app icon path
-                    width: 24, // Adjust size as needed
-                    height: 24,
-                  ),
-                  const SizedBox(width: 4), // Add a little space between icon and title
-                  const Text(
-                    "Lottlo",
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-              centerTitle: true, // Ensures the title stays centered
-              elevation: 0, // Remove shadow for a clean look
-      ),
-      body: SingleChildScrollView(
-        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // Top Image Section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-            child: AspectRatio(
-              aspectRatio: 1.8, // Slightly adjusted for a better proportion
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24), // Elegant, smooth corners
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(24),
-                  child: Image.asset(
-                    'assets/mainIcon.png', 
-                    fit: BoxFit.contain, // Avoids cutting and maintains aspect ratio
-                  ),
-                ),
-              ),
+            Image.asset(
+              'assets/homeIcon.png',
+              width: 24,
+              height: 24,
             ),
-          ),
-            // Grid Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: GridView.count(
-                crossAxisCount: 2, // Number of items per row
-                crossAxisSpacing: 16.0, // Space between columns
-                mainAxisSpacing: 16.0, // Space between rows
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(), // Disable grid scrolling
-                children: [
-                  if (info!.itemInfo.isNotEmpty)
-                      for(var item in info!.itemInfo[userId]!)
-                        FoodCard(image: info!.imageUrls[item[0]]!, name: item[1], price: item[2], pindex: item[3],isize:item[4]['size'],ititle: item[5],idesc: item[6])
-                ],
+            const SizedBox(width: 4),
+            const Text(
+              "Lottlo",
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
           ],
         ),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      body: ValueListenableBuilder(
+        valueListenable: info!.isLoading,
+        builder: (context, bool isLoading, child) {
+          // Check if still loading and no data
+          if (isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          // Update _allItems if not already set
+          if (_allItems.isEmpty && (info?.itemInfo[userId]?.isNotEmpty ?? false)) {
+            _allItems = info!.itemInfo[userId] ?? [];
+            _filteredItems = _allItems;
+          }
+
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: "Search items...",
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: _filteredItems.isNotEmpty
+                      ? GridView.count(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16.0,
+                          mainAxisSpacing: 16.0,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            for (var item in _filteredItems)
+                              FoodCard(
+                                image: info!.imageUrls[item[0]]!,
+                                name: item[1],
+                                price: item[2],
+                                pindex: item[3],
+                                isize: item[4]['size'],
+                                ititle: item[5],
+                                idesc: item[6],
+                              ),
+                          ],
+                        )
+                      : const Center(child: Text("No items found")),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
-}
-    );
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
   }
 }
 
