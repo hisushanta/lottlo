@@ -4,6 +4,7 @@ import 'package:lottlo/main.dart';
 import 'order.dart';
 import 'watch_order.dart';
 import 'about_page.dart';
+import 'love_page.dart';
 
 final userId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -31,6 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _pages = [
     BaseHome(),
     WatchOrder(),
+    LovePage(),
     UserProfilePage() 
   ];
   
@@ -58,10 +60,17 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.shopping_basket_sharp),
+            selectedIcon: Icon(Icons.shopping_basket_sharp),
+            icon: Icon(Icons.shopping_basket_outlined),
             label: 'Book',
           ),
           NavigationDestination(
+            selectedIcon: Icon(Icons.favorite_rounded),
+            icon: Icon(Icons.favorite_outline),
+            label: 'Love',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.account_box),
             icon: Icon(Icons.account_box_outlined),
             label: 'About',
           ),
