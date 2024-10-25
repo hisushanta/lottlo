@@ -56,9 +56,9 @@ class ContactUsWidget extends StatelessWidget {
             _buildContactTile(
               icon: Icons.email,
               title: 'Email Us',
-              subtitle: 'askkachrawala@gmail.com',
+              subtitle: 'lottloapp@gmail.com',
               onTap: () {
-                _launchEmail('askkachrawala@gmail.com');
+                _launchEmail('lottloapp@gmail.com');
               },
             ),
             const SizedBox(height: 10),

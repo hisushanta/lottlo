@@ -105,12 +105,28 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin{
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Center(
-          child: Text(
-            "Lottlo",
-            style: TextStyle(fontStyle: FontStyle.italic,fontWeight: FontWeight.bold,color: Colors.black),
-          ),
-        ),
+        title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min, // Ensures it takes only as much space as needed
+                children: [
+                  Image.asset(
+                    'assets/homeIcon.png', // Replace with your app icon path
+                    width: 24, // Adjust size as needed
+                    height: 24,
+                  ),
+                  const SizedBox(width: 4), // Add a little space between icon and title
+                  const Text(
+                    "Lottlo",
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              centerTitle: true, // Ensures the title stays centered
+              elevation: 0, // Remove shadow for a clean look
       ),
       body: SingleChildScrollView(
         child: Column(

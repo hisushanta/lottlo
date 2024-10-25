@@ -38,18 +38,18 @@ class FAQPage extends StatelessWidget {
             _buildFAQItem(
               question: 'What is the Lottlo app?',
               answer:
-                  'Kachra Wala is a waste management app that helps you stay informed about waste collection schedules, recycling tips, and other waste-related services in your area.',
+                  "The Lottlo app is your go-to fashion destination, offering a curated collection of trendy clothing and accessories. Designed to make shopping a delightful experience, Lottlo brings you the latest styles from top brands, all in one place. Whether you're looking for everyday essentials or statement pieces, our app provides seamless browsing, easy ordering, and personalized recommendations tailored to your unique style. With Lottlo, you're just a few taps away from revamping your wardrobe!",
             ),
             
             _buildFAQItem(
               question: 'How can I contact customer support?',
               answer:
-                  'You can reach customer support by calling +917596912157 or emailing us at askkachrawala@gmail.com. We’re here to help!',
+                  'You can reach customer support by calling +917596912157 or emailing us at lottloapp@gmail.com. We’re here to help!',
             ),
             _buildFAQItem(
               question: 'How do I update my profile?',
               answer:
-                  'To update your profile, go to the User Profile section in the app. From there, you can edit your name, and profile picture.',
+                  "To update your profile information, such as your name, address, and phone number, go to the User Profile section in the app. Simply click on the Edit Profile text, and you'll be able to make changes to your name, profile picture, address, and phone number.",
             ),
             _buildFAQItem(
               question: 'What should I do if I forget my password?',
@@ -59,7 +59,7 @@ class FAQPage extends StatelessWidget {
             const SizedBox(height: 30),
             Center(
               child: Text(
-                'Still have questions? Contact us at askkachrawala@gmail.com.',
+                'Still have questions? Contact us at lottloapp@gmail.com.',
                 style: TextStyle(
                   fontSize: 16,
                   fontStyle: FontStyle.italic,
