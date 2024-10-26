@@ -9,18 +9,34 @@ class ContactUsWidget extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF455A64), // Softer shade of grey-blue
-        title: const Text(
-          'Contact Us',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/homeIcon.png',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: 4),
+            const Text(
+              "Lottlo",
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
         ),
         centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.black,),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
         ),
+        elevation: 3,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -56,9 +72,9 @@ class ContactUsWidget extends StatelessWidget {
             _buildContactTile(
               icon: Icons.email,
               title: 'Email Us',
-              subtitle: 'askkachrawala@gmail.com',
+              subtitle: 'lottloapp@gmail.com',
               onTap: () {
-                _launchEmail('askkachrawala@gmail.com');
+                _launchEmail('lottloapp@gmail.com');
               },
             ),
             const SizedBox(height: 10),

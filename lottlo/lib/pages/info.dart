@@ -97,7 +97,7 @@ class ItemInfo{
   imageUrls = await getAllImageUrls();
   }
   Future<Map<String,String>> getAllImageUrls() async {
-    Map<String,String> imageUrls = {};
+    Map<String,String> localImageUrls = {};
     
     try {
       // Reference to the folder in Firebase Storage
@@ -106,13 +106,13 @@ class ItemInfo{
       
       for (final Reference fileRef in result.items) {
         String downloadUrl = await fileRef.getDownloadURL();
-        imageUrls[fileRef.fullPath] = downloadUrl;
+        localImageUrls[fileRef.fullPath] = downloadUrl;
       }
     } catch (e) {
       print('Error retrieving image URLs: $e');
     }
     
-    return imageUrls;
+    return localImageUrls;
   }
 
 
@@ -167,6 +167,8 @@ class ItemInfo{
             }
           }
           loveItem[uuid!] = ddlove;
+        } else{
+          loveItem[uuid!] = [];
         }
       });
      

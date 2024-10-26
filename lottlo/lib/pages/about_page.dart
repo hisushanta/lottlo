@@ -146,24 +146,32 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: info!.isLoading,
-      builder: (context, isLoading, _) {
-        if (isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else {
-          return Scaffold(
+    return  Scaffold(
             backgroundColor: const Color(0xFFF8F8F8),
             appBar: AppBar(
               backgroundColor: Colors.white,
               elevation: 0,
-              title: const Text(
-                'Profile',
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,fontWeight: FontWeight.bold,color: Colors.black
-                ),
+              title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/homeIcon.png',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: 4),
+            const Text(
+              "Lottlo",
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
-              centerTitle: true,
+            ),
+          ],
+        ),
+        centerTitle: true,
               actions: [
                 if (_isEditing)
                   IconButton(
@@ -172,7 +180,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ),
               ],
             ),
-            body: SingleChildScrollView(
+            body: ValueListenableBuilder<bool>(
+            valueListenable: info!.isLoading,
+            builder: (context, isLoading, _) {
+              if (isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+              return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -274,13 +288,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ],
                 ),
               ),
-            ),
-          );
-        }
-      },
+            );
+              }
+        },
+          ),
     );
   }
-
   Widget _buildCustomDisplayTile({required String title, required String content, required IconData icon}) {
     return ListTile(
       leading: Icon(icon, color: Colors.blueAccent),
@@ -356,7 +369,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ),
             ),
             const Spacer(),
-            const Icon(Icons.arrow_forward_ios, size: 16),
+            const Icon(Icons.arrow_forward_ios, size: 16,color: Colors.orange,),
           ],
         ),
       ),

@@ -20,26 +20,42 @@ class _WatchOrder extends State<WatchOrder> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/homeIcon.png',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: 4),
+            const Text(
+              "Lottlo",
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      
+         
+      body: ValueListenableBuilder<bool>(
       valueListenable: info!.isLoading,
       builder: (context, isLoading, _) {
         if (isLoading) {
           return const Center(child: CircularProgressIndicator());
         } else {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              title: const Text(
-                "Your's Order",
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,fontWeight: FontWeight.bold,color: Colors.black
-                ),
-              ),
-              backgroundColor: Colors.white,
-              elevation: 0,
-              centerTitle: true,
-            ),
-            body: orders[info!.uuid]!.isEmpty
+          return orders[info!.uuid]!.isEmpty
                 ? const Center(
                     child: Text(
                       "No active orders Found",
@@ -143,10 +159,11 @@ class _WatchOrder extends State<WatchOrder> {
                         ),
                       );
                     },
-                  ),
-          );
+                  );
+        
         }
       },
+      ),
     );
   }
 }
