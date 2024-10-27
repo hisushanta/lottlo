@@ -106,6 +106,35 @@ class _UserProfilePageState extends State<UserProfilePage> {
       debugPrint('Error in _pickImage: $e');
     }
   }
+  void _showProfileImageDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (_profileImagePath != null)
+                  Image.file(
+                    File(_profileImagePath!),
+                    fit: BoxFit.cover,
+                  )
+                else
+                  Image.asset("assets/mainIcon.png"),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Close'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   void _toggleEdit() {
     setState(() {
@@ -196,14 +225,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       child: Column(
                         children: [
                           GestureDetector(
-                            onTap: _isEditing ? _pickImage : null,
+                            onTap:   _isEditing ? _pickImage : _showProfileImageDialog,
                             child: CircleAvatar(
                               radius: 40,
                               backgroundImage: _profileImagePath != null
                                   ? _profileImagePath!.contains('assets')
                                       ? AssetImage(_profileImagePath!) as ImageProvider
                                       : FileImage(File(_profileImagePath!))
-                                  : AssetImage("assets/mainIcon.png"),
+                                  : const AssetImage("assets/mainIcon.png"),
                             ),
                           ),
                           const SizedBox(height: 8),
