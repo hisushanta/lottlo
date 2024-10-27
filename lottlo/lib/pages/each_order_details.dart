@@ -46,7 +46,7 @@ class ProductDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('$item Details', style: const TextStyle(fontStyle: FontStyle.italic,fontWeight: FontWeight.bold,color: Colors.black)),
+        title: const Text('Details', style: TextStyle(fontStyle: FontStyle.italic,fontWeight: FontWeight.bold,color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
