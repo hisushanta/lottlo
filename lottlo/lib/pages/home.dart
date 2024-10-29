@@ -224,6 +224,7 @@ class FoodCard extends StatelessWidget {
   final List isize;
   final String ititle;
   final String idesc;
+
   const FoodCard({
     Key? key,
     required this.image,
@@ -232,96 +233,109 @@ class FoodCard extends StatelessWidget {
     required this.pindex,
     required this.isize,
     required this.ititle,
-    required this.idesc
+    required this.idesc,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Color.fromARGB(255,241, 222, 198),
+      color: Color.fromARGB(255, 241, 222, 198),
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Stack(
         children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
-              ),
-              child: Image.network(
-                image,
-                fit: BoxFit.fill,
-                height: double.infinity,
-              ),
+          // Image covers the entire card
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.network(
+              image,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(1.0),
-            child: Column(
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold),
+          // Overlay container for text and button
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5),
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(16),
                 ),
-                const SizedBox(height: 1),
-                Center(child: Text(
-                  price,
-                  style:  TextStyle(color: Colors.grey[600]),
-                )),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical:2,horizontal: 10),
-         child:ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.lightGreen, 
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20), // Circular corners (adjusted for smaller size)
               ),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16), // Smaller padding for compact look
-              elevation: 4, // Slightly reduced elevation
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddItemScreen(
-                    name: name,
-                    price: price,
-                    image: image,
-                    pindex: pindex,
-                    isize: isize,
-                    ititle: ititle,
-                    idesc: idesc,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-              );
-            },
-            child: const Row(
-              mainAxisSize: MainAxisSize.min, // Button adjusts based on content size
-              children: [
-                Icon(Icons.shopping_cart, color: Colors.white, size: 18), // Smaller icon size
-                SizedBox(width: 6), // Reduced spacing between icon and text
-                Text(
-                  'Buy Now',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14, // Smaller font size for compactness
-                    fontWeight: FontWeight.bold,
+                  const SizedBox(height: 4),
+                  Text(
+                    price,
+                    style: TextStyle(
+                      color: Colors.grey[300],
+                      fontSize: 12,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightGreen,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddItemScreen(
+                            name: name,
+                            price: price,
+                            image: image,
+                            pindex: pindex,
+                            isize: isize,
+                            ititle: ititle,
+                            idesc: idesc,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.shopping_cart, color: Colors.white, size: 18),
+                        SizedBox(width: 6),
+                        Text(
+                          'Buy Now',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          )
-
-
         ],
       ),
     );
   }
 }
+
