@@ -92,9 +92,12 @@ class ItemInfo{
     }else{
       updateUserProfile("Unknown", "assets/mainIcon.png", '','');
     }
-
+  
   // Get all images
   imageUrls = await getAllImageUrls();
+  }
+  List<List> getItem(){
+    return List.from(itemInfo[uuid]!);
   }
   Future<Map<String,String>> getAllImageUrls() async {
     Map<String,String> localImageUrls = {};
