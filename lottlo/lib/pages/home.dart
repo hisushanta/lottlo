@@ -7,6 +7,7 @@ import 'about_page.dart';
 import 'love_page.dart';
 
 final userId = FirebaseAuth.instance.currentUser!.uid;
+String _selectedSortOrder = 'Low to High'; // Default sort order
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -93,6 +94,8 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
   List<List> _filteredItems = [];
   List<List> _allItems = [];
+  
+
 
   @override
   void initState() {
@@ -100,11 +103,27 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
     _searchController.addListener(_onSearchChanged);
     // Initialize data if already available
     if (info?.itemInfo[userId]?.isNotEmpty ?? false) {
-      _allItems = info!.itemInfo[userId] ?? [];
+      _allItems = info!.getItem();
       _filteredItems = _allItems;
+      applySortOrderForInit();
     }
   }
-
+   void applySortOrderForInit() {
+    
+      if (_selectedSortOrder == 'Low to High') {
+        _filteredItems.sort((a, b) {
+          final priceA = double.tryParse(a[2].split("₹")[1]) ?? 0.0; // Assuming price is at index 2
+          final priceB = double.tryParse(b[2].split("₹")[1]) ?? 0.0;
+          return priceA.compareTo(priceB);
+        });
+      } else if (_selectedSortOrder == 'High to Low') {
+        _filteredItems.sort((a, b) {
+          final priceA = double.tryParse(a[2].split("₹")[1]) ?? 0.0;
+          final priceB = double.tryParse(b[2].split("₹")[1]) ?? 0.0;
+          return priceB.compareTo(priceA);
+        });
+      }
+}
   void _onSearchChanged() {
     final query = _searchController.text.toLowerCase();
     setState(() {
@@ -112,8 +131,154 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
         final name = item[1].toString().toLowerCase();
         return name.contains(query);
       }).toList();
+      _applySortOrder();
     });
   }
+  void _showFilterDialog() {
+      ValueNotifier<String> _tempSelectedSortOrder = ValueNotifier<String>(_selectedSortOrder);
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            backgroundColor: Colors.grey[100],
+            title: const Center(
+              child: Text(
+                "Filter Options",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                // Sort by Price Label with Icon
+                const Row(
+                  children: [
+                    Icon(Icons.sort, color: Colors.amber),
+                    SizedBox(width: 8),
+                    Text(
+                      "Sort by Price",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+
+                // Sort Order Dropdown
+                ValueListenableBuilder<String>(
+                  valueListenable: _tempSelectedSortOrder,
+                  builder: (context, value, child) {
+                    return DropdownButtonFormField<String>(
+                      value: value,
+                      items: <String>['Low to High', 'High to Low']
+                          .map((String option) {
+                        return DropdownMenuItem<String>(
+                          value: option,
+                          child: Row(
+                            children: [
+                              Icon(
+                                option == 'Low to High'
+                                    ? Icons.arrow_upward
+                                    : Icons.arrow_downward,
+                                color: Colors.blueAccent,
+                              ),
+                              SizedBox(width: 8),
+                              Text(option),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                      ),
+                      onChanged: (newValue) {
+                        _tempSelectedSortOrder.value = newValue!;
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              // Buttons Row with Apply and Cancel
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    ),
+                    child: const Text(
+                      "Cancel",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.greenAccent.shade700,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    ),
+                    child: const Text(
+                      "Apply",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      _selectedSortOrder = _tempSelectedSortOrder.value;
+                      _applySortOrder();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+
+
+  void _applySortOrder() {
+    setState(() {
+      if (_selectedSortOrder == 'Low to High') {
+        _filteredItems.sort((a, b) {
+          final priceA = double.tryParse(a[2].split("₹")[1]) ?? 0.0; // Assuming price is at index 2
+          final priceB = double.tryParse(b[2].split("₹")[1]) ?? 0.0;
+          return priceA.compareTo(priceB);
+        });
+      } else if (_selectedSortOrder == 'High to Low') {
+        _filteredItems.sort((a, b) {
+          final priceA = double.tryParse(a[2].split("₹")[1]) ?? 0.0;
+          final priceB = double.tryParse(b[2].split("₹")[1]) ?? 0.0;
+          return priceB.compareTo(priceA);
+        });
+      }
+    });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +321,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
 
           // Update _allItems if not already set
           if (_allItems.isEmpty && (info?.itemInfo[userId]?.isNotEmpty ?? false)) {
-            _allItems = info!.itemInfo[userId] ?? [];
+            _allItems = info!.getItem();
             _filteredItems = _allItems;
           }
 
@@ -165,17 +330,32 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: "Search items...",
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            hintText: "Search items...",
+                            prefixIcon: Icon(Icons.search),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 8), // Spacing between search bar and filter icon
+                      IconButton(
+                        icon: Icon(Icons.filter_list),
+                        onPressed: () {
+                          // Code to open the filter options
+                          _showFilterDialog(); // Call a function to display filter options
+                        },
+                      ),
+                    ],
                   ),
                 ),
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: _filteredItems.isNotEmpty
