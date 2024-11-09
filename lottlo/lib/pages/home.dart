@@ -323,6 +323,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
           if (_allItems.isEmpty && (info?.itemInfo[userId]?.isNotEmpty ?? false)) {
             _allItems = info!.getItem();
             _filteredItems = _allItems;
+            applySortOrderForInit();
           }
 
           return SingleChildScrollView(
