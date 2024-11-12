@@ -77,7 +77,7 @@ class LovePage extends StatelessWidget {
                                       item[0], // Item image
                                       height: 300,
                                       width: double.infinity,
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.fill,
                                       loadingBuilder: (context, child, loadingProgress) {
                                         if (loadingProgress == null) return child;
                                         return const Center(
