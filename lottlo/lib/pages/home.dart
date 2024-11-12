@@ -7,7 +7,7 @@ import 'about_page.dart';
 import 'love_page.dart';
 
 final userId = FirebaseAuth.instance.currentUser!.uid;
-String _selectedSortOrder = 'Low to High'; // Default sort order
+String _selectedSortOrder = 'Default'; // Default sort order
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -94,7 +94,6 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
   List<List> _filteredItems = [];
   List<List> _allItems = [];
-  
 
 
   @override
@@ -104,7 +103,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
     // Initialize data if already available
     if (info?.itemInfo[userId]?.isNotEmpty ?? false) {
       _allItems = info!.getItem();
-      _filteredItems = _allItems;
+      _filteredItems = List.from(_allItems);
       applySortOrderForInit();
     }
   }
@@ -127,10 +126,10 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
   void _onSearchChanged() {
     final query = _searchController.text.toLowerCase();
     setState(() {
-      _filteredItems = _allItems.where((item) {
+      _filteredItems = List.from(_allItems.where((item) {
         final name = item[1].toString().toLowerCase();
         return name.contains(query);
-      }).toList();
+      }).toList());
       _applySortOrder();
     });
   }
@@ -177,7 +176,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
                   builder: (context, value, child) {
                     return DropdownButtonFormField<String>(
                       value: value,
-                      items: <String>['Low to High', 'High to Low']
+                      items: <String>['Low to High', 'High to Low',"Default"]
                           .map((String option) {
                         return DropdownMenuItem<String>(
                           value: option,
@@ -186,7 +185,9 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
                               Icon(
                                 option == 'Low to High'
                                     ? Icons.arrow_upward
-                                    : Icons.arrow_downward,
+                                    : option == "High to Low"
+                                    ? Icons.arrow_downward
+                                    :Icons.shuffle,
                                 color: Colors.blueAccent,
                               ),
                               SizedBox(width: 8),
@@ -275,6 +276,12 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
           final priceB = double.tryParse(b[2].split("₹")[1]) ?? 0.0;
           return priceB.compareTo(priceA);
         });
+      } else{
+        final query = _searchController.text.toLowerCase();
+        _filteredItems = List.from(_allItems.where((item) {
+        final name = item[1].toString().toLowerCase();
+        return name.contains(query);
+      }).toList());
       }
     });
 }
@@ -322,7 +329,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
           // Update _allItems if not already set
           if (_allItems.isEmpty && (info?.itemInfo[userId]?.isNotEmpty ?? false)) {
             _allItems = info!.getItem();
-            _filteredItems = _allItems;
+            _filteredItems = List.from(_allItems);
             applySortOrderForInit();
           }
 
