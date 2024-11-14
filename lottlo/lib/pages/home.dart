@@ -92,6 +92,8 @@ class BaseHome extends StatefulWidget {
 
 class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+
   List<List> _filteredItems = [];
   List<List> _allItems = [];
 
@@ -284,12 +286,17 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
       }).toList());
       }
     });
-}
+  }
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GestureDetector(
+      onTap: () {
+        // Unfocuses the TextField when tapping outside of it
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -313,9 +320,12 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
             ),
           ],
         ),
+
         centerTitle: true,
         elevation: 0,
       ),
+      
+   
       body: ValueListenableBuilder(
         valueListenable: info!.isLoading,
         builder: (context, bool isLoading, child) {
@@ -343,20 +353,20 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
                       Expanded(
                         child: TextField(
                           controller: _searchController,
+                          focusNode: _focusNode,
                           decoration: InputDecoration(
                             hintText: "Search items...",
-                            prefixIcon: Icon(Icons.search),
+                            prefixIcon: const Icon(Icons.search),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(24),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8), // Spacing between search bar and filter icon
+                      const  SizedBox(width: 8), 
                       IconButton(
-                        icon: Icon(Icons.filter_list),
+                        icon: const Icon(Icons.filter_list),
                         onPressed: () {
-                          // Code to open the filter options
                           _showFilterDialog(); // Call a function to display filter options
                         },
                       ),
@@ -393,13 +403,16 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
           );
         },
       ),
+      ),
     );
+    
   }
 
   @override
   void dispose() {
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 }
