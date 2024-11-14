@@ -265,7 +265,7 @@ class ProductDetailsScreen extends StatelessWidget {
                 Navigator.of(context).pop();
                 // Logic to cancel the order
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Order cancelled successfully')),
+                  const SnackBar(content: Text('Order cancelled successfully'),duration: Duration(seconds: 1),),
                 );
 
                 // _showCancelConfirmationDialog(context);
