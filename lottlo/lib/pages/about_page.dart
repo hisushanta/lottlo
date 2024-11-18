@@ -111,6 +111,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
+          backgroundColor: Colors.white,
           child: Container(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -127,9 +128,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
                   ,
                 const SizedBox(height: 8),
-                ElevatedButton(
+               ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Close'),
+                  child:  const Text('Close',style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold,color: Colors.black),),
                 ),
               ],
             ),
