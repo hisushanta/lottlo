@@ -116,13 +116,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (_profileImagePath != null)
-                  Image.file(
+                (_profileImagePath != null)
+                ? _profileImagePath!.contains('assets') 
+                ? Image.asset(_profileImagePath!)
+                : Image.file(
                     File(_profileImagePath!),
                     fit: BoxFit.cover,
                   )
-                else
-                  Image.asset("assets/mainIcon.png"),
+                  :Image.asset("assets/mainIcon.png")
+
+                  ,
                 const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
