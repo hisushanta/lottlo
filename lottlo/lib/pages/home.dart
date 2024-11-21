@@ -343,63 +343,66 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
             applySortOrderForInit();
           }
 
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _searchController,
-                          focusNode: _focusNode,
-                          decoration: InputDecoration(
-                            hintText: "Search items...",
-                            prefixIcon: const Icon(Icons.search),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(24),
-                            ),
+         return Column(
+            children: [
+              // Fixed Search Bar and Filter Button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        focusNode: _focusNode,
+                        decoration: InputDecoration(
+                          hintText: "Search items...",
+                          prefixIcon: const Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(24),
                           ),
                         ),
                       ),
-                      const  SizedBox(width: 8), 
-                      IconButton(
-                        icon: const Icon(Icons.filter_list),
-                        onPressed: () {
-                          _showFilterDialog(); // Call a function to display filter options
-                        },
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton(
+                      icon: const Icon(Icons.filter_list),
+                      onPressed: () {
+                        _showFilterDialog();
+                      },
+                    ),
+                  ],
                 ),
+              ),
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: _filteredItems.isNotEmpty
-                      ? GridView.count(
+              // Scrollable Content Below
+              Expanded(
+                child: _filteredItems.isNotEmpty
+                    ? GridView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 16.0,
                           mainAxisSpacing: 16.0,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          children: [
-                            for (var item in _filteredItems)
-                              FoodCard(
-                                image: info!.imageUrls[item[0]]!,
-                                name: item[1],
-                                price: item[2],
-                                pindex: item[3],
-                                isize: item[4]['size'],
-                                ititle: item[5],
-                                idesc: item[6],
-                              ),
-                          ],
-                        )
-                      : const Center(child: Text("No items found")),
-                ),
-              ],
-            ),
+                        ),
+                        itemCount: _filteredItems.length,
+                        itemBuilder: (context, index) {
+                          final item = _filteredItems[index];
+                          return FoodCard(
+                            image: info!.imageUrls[item[0]]!,
+                            name: item[1],
+                            price: item[2],
+                            pindex: item[3],
+                            isize: item[4]['size'],
+                            ititle: item[5],
+                            idesc: item[6],
+                          );
+                        },
+                      )
+                    : const Center(
+                        child: Text("No items found"),
+                      ),
+              ),
+            ],
           );
         },
       ),
