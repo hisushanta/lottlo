@@ -65,7 +65,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
           _buildPromiseItem(
             Icons.local_shipping_outlined,
             'FREE Delivery',
-            'Delivery by 28 Oct, Monday',
+            'Delivery Guaranteed Within 3 Days',
             Colors.green,
           ),
           const Divider(height: 1),
@@ -79,7 +79,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
           _buildPromiseItem(
             Icons.payment_outlined,
             'Cash on Delivery Available',
-            'Pay when you receive',
+            'Pay when you receive and are satisfied.',
             Colors.orange,
           ),
           const Divider(height: 1),
