@@ -81,7 +81,7 @@ class ContactUsWidget extends StatelessWidget {
             _buildContactTile(
               icon: Icons.share,
               title: 'Social Media',
-              subtitle: 'Twitter: @lottloapp\nFacebook: facebook.com/lottloapp\nInstagram: @lottloapp',
+              subtitle: 'Twitter: @lottloapp\nFacebook: @lottloapp\nInstagram: @lottloapp',
             ),
             const SizedBox(height: 20),
             
