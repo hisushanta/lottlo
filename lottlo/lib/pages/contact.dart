@@ -81,7 +81,11 @@ class ContactUsWidget extends StatelessWidget {
             _buildContactTile(
               icon: Icons.share,
               title: 'Social Media',
-              subtitle: 'Twitter: @lottloapp\nFacebook: @lottloapp\nInstagram: @lottloapp',
+              subtitle: 'Tap to visit our profiles!',
+              onTap: () {
+              _showSocialMediaOptions(context);
+            },
+
             ),
             const SizedBox(height: 20),
             
@@ -176,8 +180,50 @@ class ContactUsWidget extends StatelessWidget {
     );
   }
 
+  void _showSocialMediaOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            ListTile(
+              leading: Image.asset("assets/x-icon.png",width: 24, height: 24, fit: BoxFit.contain,),
+              title: const Text('Twitter'),
+              onTap: () {
+                Navigator.pop(context);
+                _launchURL('https://twitter.com/lottloapp');
+              },
+            ),
+            ListTile(
+              leading: Image.asset("assets/facebook-icon.png",width: 24, height: 24, fit: BoxFit.contain,),
+              title: const Text('Facebook'),
+              onTap: () {
+                Navigator.pop(context);
+                _launchURL('https://facebook.com/lottloapp');
+              },
+            ),
+            ListTile(
+              leading: Image.asset("assets/instagram-icon.png",width: 24, height: 24, fit: BoxFit.contain,),
+              title: const Text('Instagram'),
+              onTap: () {
+                Navigator.pop(context);
+                _launchURL('https://instagram.com/lottloapp');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-   void _launchPhone(String phoneNumber) async {
+  void _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw 'Could not launch $url';
+    }
+  }
+
+  void _launchPhone(String phoneNumber) async {
     final Uri phoneUri = Uri.parse(phoneNumber);
     if (await canLaunchUrl(phoneUri)) {
       await launchUrl(phoneUri);
