@@ -182,9 +182,12 @@ class ContactUsWidget extends StatelessWidget {
 
   void _showSocialMediaOptions(BuildContext context) {
     showModalBottomSheet(
+      backgroundColor: Colors.white,
       context: context,
       builder: (context) {
-        return Wrap(
+        return Padding( 
+          padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal:4.0),
+          child: Wrap(
           children: [
             ListTile(
               leading: Image.asset("assets/x-icon.png",width: 24, height: 24, fit: BoxFit.contain,),
@@ -211,6 +214,7 @@ class ContactUsWidget extends StatelessWidget {
               },
             ),
           ],
+        )
         );
       },
     );
