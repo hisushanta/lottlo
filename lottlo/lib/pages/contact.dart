@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:lottlo/main.dart';
 
 class ContactUsWidget extends StatelessWidget {
   const ContactUsWidget({Key? key}) : super(key: key);
@@ -190,7 +191,7 @@ class ContactUsWidget extends StatelessWidget {
           child: Wrap(
           children: [
             ListTile(
-              leading: Image.asset("assets/x-icon.png",width: 24, height: 24, fit: BoxFit.contain,),
+              leading: Image.network(info!.imageUrls["assets/x-icon.png"]!,width: 24, height: 24, fit: BoxFit.contain,),
               title: const Text('Twitter'),
               onTap: () {
                 Navigator.pop(context);
@@ -198,7 +199,7 @@ class ContactUsWidget extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Image.asset("assets/facebook-icon.png",width: 24, height: 24, fit: BoxFit.contain,),
+              leading: Image.network(info!.imageUrls["assets/facebook-icon.png"]!,width: 24, height: 24, fit: BoxFit.contain,),
               title: const Text('Facebook'),
               onTap: () {
                 Navigator.pop(context);
@@ -206,7 +207,7 @@ class ContactUsWidget extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Image.asset("assets/instagram-icon.png",width: 24, height: 24, fit: BoxFit.contain,),
+              leading: Image.network(info!.imageUrls["assets/instagram-icon.png"]!,width: 24, height: 24, fit: BoxFit.contain,),
               title: const Text('Instagram'),
               onTap: () {
                 Navigator.pop(context);
