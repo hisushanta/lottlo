@@ -31,10 +31,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0; // Track the selected index for the navigation bar
   final List<Widget> _pages = [
-    BaseHome(),
+    const BaseHome(),
     WatchOrder(),
     LovePage(),
-    UserProfilePage() 
+    const UserProfilePage() 
   ];
   
   
@@ -86,6 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 class BaseHome extends StatefulWidget {
+  const BaseHome({super.key});
+
   @override
   HomePageBar createState() => HomePageBar();
 }
@@ -192,7 +194,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
                                     :Icons.shuffle,
                                 color: Colors.blueAccent,
                               ),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Text(option),
                             ],
                           ),
@@ -205,7 +207,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide.none,
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                       ),
                       onChanged: (newValue) {
                         _tempSelectedSortOrder.value = newValue!;
@@ -226,7 +228,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     ),
                     child: const Text(
                       "Cancel",
@@ -242,7 +244,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     ),
                     child: const Text(
                       "Apply",
@@ -325,7 +327,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
         elevation: 0,
       ),
       
-   
+      drawer: const CustomDrawer(),
       body: ValueListenableBuilder(
         valueListenable: info!.isLoading,
         builder: (context, bool isLoading, child) {
@@ -420,6 +422,131 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
   }
 }
 
+class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: [
+          // Header Section
+          Container(
+            height: 200, 
+            width: double.maxFinite, // Set the height to cover the entire space
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color.fromARGB(255, 0, 0, 0), Color.fromARGB(255, 224, 223, 221)],
+              ),
+            ),
+            child: const DrawerHeader(
+              margin: EdgeInsets.zero,
+              padding: EdgeInsets.zero,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 40,  // Adjust the radius as per your needs
+                    backgroundImage: AssetImage('assets/homeIcon.png'), // Replace with your logo
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Lottlo',
+                    style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                  ),
+                  
+                ],
+              ),
+            ),
+          ),
+
+          // Menu Section
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                _buildMenuTile(
+                  context,
+                  title: "Men",
+                  children: [
+                    _buildSubMenuTile(context, "Jeans"),
+                    _buildSubMenuTile(context, "Shirts"),
+                    _buildSubMenuTile(context, "T-Shirts"),
+                    _buildSubMenuTile(context, "Sweaters"),
+                  ],
+                ),
+                _buildMenuTile(
+                  context,
+                  title: "Women",
+                  children: [
+                    _buildSubMenuTile(context, "Jeans"),
+                    _buildSubMenuTile(context, "T-Shirts"),
+                    _buildSubMenuTile(context, "Sarees"),
+                    _buildSubMenuTile(context, "Night Dress"),
+                    _buildSubMenuTile(context, "Kurtis"),
+                  ],
+                ),
+                _buildSubMenuTile(context, "Bed Cover"),
+                _buildSubMenuTile(context, "Pillow Cover")
+              ],
+            ),
+          ),
+
+          // Footer Section
+          Container(
+            color: Colors.amber.shade50,
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.help_outline, color: Colors.orange),
+                const SizedBox(width: 8),
+                Text(
+                  "Need Help?",
+                  style: TextStyle(
+                    color: Colors.orange.shade900,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Main Menu Item with Expansion Tile
+  Widget _buildMenuTile(BuildContext context, {required String title, required List<Widget> children}) {
+    return ExpansionTile(
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontWeight: FontWeight.w600,
+          color: Colors.black,
+        ),
+      ),
+      children: children,
+    );
+  }
+
+  // Submenu Tile for individual options
+  Widget _buildSubMenuTile(BuildContext context, String title) {
+    return ListTile(
+      title: Text(title, style: const TextStyle(fontSize: 16)),
+      onTap: () {
+        Navigator.pop(context);
+        // Implement navigation logic or state change
+      },
+    );
+  }
+}
+
 class FoodCard extends StatelessWidget {
   final String image;
   final String name;
@@ -430,7 +557,7 @@ class FoodCard extends StatelessWidget {
   final String idesc;
 
   const FoodCard({
-    Key? key,
+    super.key,
     required this.image,
     required this.name,
     required this.price,
@@ -438,12 +565,12 @@ class FoodCard extends StatelessWidget {
     required this.isize,
     required this.ititle,
     required this.idesc,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Color.fromARGB(255, 241, 222, 198),
+      color: const Color.fromARGB(255, 241, 222, 198),
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
