@@ -472,7 +472,7 @@ class FoodCard extends StatelessWidget {
                   bottom: Radius.circular(16),
                 ),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
