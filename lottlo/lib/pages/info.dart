@@ -9,13 +9,12 @@ class ItemInfo{
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Map<String,List<List>> itemInfo = {};
+  Map<String,List> categories = {};
   Map<String,String> imageUrls = {};
   Map<String,List<List>> orderActiveStatus = {};
   Map<String,List<List>> loveItem = {};
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(true); // To track loading state
   Map<String, Map<String, dynamic>> userProfile = {}; // New map for user profile
-  List<String> scrabItem = ["Copper","Aluminium","Pital","Steel","Metal","News Paper","Card Board","Plastic"];
-  List<String> scrapItem2 = ["E-Waste","Furniture","Sifting Boy"];
 
   ItemInfo(this.uuid) {
     itemInfo[uuid!] = [];
@@ -42,6 +41,21 @@ class ItemInfo{
         itemStore.add(baseItem[key]);
       }
       itemInfo[uuid!] = itemStore;
+
+      // Categories Store
+      var cdata = await _firestore.collection("Item").doc("lottlo").get();
+      var baseCategory = cdata.data()!['categories'];
+      for (var key in baseCategory.keys){
+        categories[key]= baseCategory[key];
+      }
+      // Extract the singleOption list
+      List<dynamic> singleOptionList = categories['singleOption']!;
+
+      // Remove singleOption from the map
+      categories.remove('singleOption');
+
+      // Add singleOption to the end of the map
+      categories['singleOption'] = singleOptionList;
     }
      // Love order store 
      var loveData = await _firestore.collection('users').doc(uuid).collection('love').get();

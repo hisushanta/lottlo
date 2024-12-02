@@ -428,6 +428,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Colors.white,
       child: Column(
         children: [
           // Header Section
@@ -470,29 +471,19 @@ class CustomDrawer extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                _buildMenuTile(
-                  context,
-                  title: "Men",
-                  children: [
-                    _buildSubMenuTile(context, "Jeans"),
-                    _buildSubMenuTile(context, "Shirts"),
-                    _buildSubMenuTile(context, "T-Shirts"),
-                    _buildSubMenuTile(context, "Sweaters"),
-                  ],
-                ),
-                _buildMenuTile(
-                  context,
-                  title: "Women",
-                  children: [
-                    _buildSubMenuTile(context, "Jeans"),
-                    _buildSubMenuTile(context, "T-Shirts"),
-                    _buildSubMenuTile(context, "Sarees"),
-                    _buildSubMenuTile(context, "Night Dress"),
-                    _buildSubMenuTile(context, "Kurtis"),
-                  ],
-                ),
-                _buildSubMenuTile(context, "Bed Cover"),
-                _buildSubMenuTile(context, "Pillow Cover")
+                for (var key in info!.categories.keys)
+                  if (key != "singleOption")
+                    _buildMenuTile(
+                      context,
+                      title: key,
+                      children: [
+                        for (var item in info!.categories[key]!)
+                          _buildSubMenuTile(context, item),
+                      ],
+                    ) else
+                        for(var item in info!.categories[key]!)
+                          _buildSubMenuTile(context,item )
+                  
               ],
             ),
           ),
