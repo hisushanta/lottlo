@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottlo/main.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'order.dart';
 import 'watch_order.dart';
 import 'about_page.dart';
@@ -87,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class BaseHome extends StatefulWidget {
   const BaseHome({super.key});
+  static Function(String)? filterByCategory; // Expose a callback
 
   @override
   HomePageBar createState() => HomePageBar();
@@ -94,7 +96,7 @@ class BaseHome extends StatefulWidget {
 
 class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
+  FocusNode _focusNode = FocusNode();
 
   List<List> _filteredItems = [];
   List<List> _allItems = [];
@@ -103,6 +105,15 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    // Assign the filter callback
+    BaseHome.filterByCategory = (String category) {
+      setState(() {
+        _filteredItems = _allItems.where((item) {
+          return item[7].toLowerCase().contains(category.toLowerCase()); // Update with your condition
+        }).toList();
+        FocusScope.of(context).unfocus();
+      });
+    };
     _searchController.addListener(_onSearchChanged);
     // Initialize data if already available
     if (info?.itemInfo[userId]?.isNotEmpty ?? false) {
@@ -302,7 +313,8 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Row(
+        title: GestureDetector( 
+          child:Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -322,12 +334,24 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
             ),
           ],
         ),
+        onTap: (){
+          setState(() {
+            _selectedSortOrder = "Default";     
+            _allItems = info!.getItem();
+            _filteredItems = List.from(_allItems);
+            _searchController.text = "";
+            applySortOrderForInit();   
+            FocusScope.of(context).unfocus();
 
+          });
+         },
+        ),
         centerTitle: true,
         elevation: 0,
       ),
       
-      drawer: const CustomDrawer(),
+      drawer:const CustomDrawer(),
+        
       body: ValueListenableBuilder(
         valueListenable: info!.isLoading,
         builder: (context, bool isLoading, child) {
@@ -463,8 +487,9 @@ class CustomDrawer extends StatelessWidget {
                   
                 ],
               ),
+              
+              ),
             ),
-          ),
 
           // Menu Section
           Expanded(
@@ -478,18 +503,19 @@ class CustomDrawer extends StatelessWidget {
                       title: key,
                       children: [
                         for (var item in info!.categories[key]!)
-                          _buildSubMenuTile(context, item),
+                          _buildSubMenuTile(context, item,key),
                       ],
                     ) else
                         for(var item in info!.categories[key]!)
-                          _buildSubMenuTile(context,item )
+                          _buildSubMenuTile(context,item,"Nothig")
                   
               ],
             ),
           ),
 
           // Footer Section
-          Container(
+          GestureDetector(
+            child:Container(
             color: Colors.amber.shade50,
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -507,11 +533,21 @@ class CustomDrawer extends StatelessWidget {
               ],
             ),
           ),
+          onTap: (){
+            _launchEmail('lottloapp@gmail.com');
+          },
+          ),
         ],
       ),
     );
   }
-
+  
+  Future<void> _launchEmail(String email) async {
+      final Uri emailUri = Uri.parse('mailto:$email');
+      if (!await launchUrl(emailUri)) {
+        throw 'Could not launch $email';
+      }
+    }
   // Main Menu Item with Expansion Tile
   Widget _buildMenuTile(BuildContext context, {required String title, required List<Widget> children}) {
     return ExpansionTile(
@@ -522,20 +558,30 @@ class CustomDrawer extends StatelessWidget {
           color: Colors.black,
         ),
       ),
-      children: children,
+      children: children,    
     );
   }
 
   // Submenu Tile for individual options
-  Widget _buildSubMenuTile(BuildContext context, String title) {
+  Widget _buildSubMenuTile(BuildContext context, String title,String category) {
     return ListTile(
       title: Text(title, style: const TextStyle(fontSize: 16)),
       onTap: () {
-        Navigator.pop(context);
+        itemSearch(title,category,context);
         // Implement navigation logic or state change
       },
     );
   }
+
+  void itemSearch(String query,String category, BuildContext context) {
+    // Pass the filter query to BaseHome using a global method or state management
+    if (category == "men" || category == "women"){
+      query = "$category/$query";
+    } 
+    BaseHome.filterByCategory!(query);
+    Navigator.pop(context); // Close the drawer after selection
+  }
+
 }
 
 class FoodCard extends StatelessWidget {
