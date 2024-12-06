@@ -122,7 +122,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
       applySortOrderForInit();
     }
   }
-   void applySortOrderForInit() {
+  void applySortOrderForInit() {
     
       if (_selectedSortOrder == 'Low to High') {
         _filteredItems.sort((a, b) {
@@ -137,17 +137,27 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
           return priceB.compareTo(priceA);
         });
       }
-}
+  }
+  // Utility method to normalize text by removing special characters and spaces
+  String _normalizeText(String text) {
+    return text.toLowerCase() // Convert to lowercase
+        .replaceAll(RegExp(r"[^\w\s]"), '') // Remove special characters
+        .replaceAll(RegExp(r'\s+'), ''); // Remove spaces
+  }
+
+  // Updated search function
   void _onSearchChanged() {
-    final query = _searchController.text.toLowerCase();
+    final query = _normalizeText(_searchController.text); // Normalize search query
     setState(() {
-      _filteredItems = List.from(_allItems.where((item) {
-        final name = item[1].toString().toLowerCase();
-        return name.contains(query);
-      }).toList());
+      _filteredItems = _allItems.where((item) {
+        final name = _normalizeText(item[1].toString()); // Normalize item name
+        return name.contains(query); // Check if the item name contains the normalized query
+      }).toList();
       _applySortOrder();
     });
   }
+
+
   void _showFilterDialog() {
       ValueNotifier<String> _tempSelectedSortOrder = ValueNotifier<String>(_selectedSortOrder);
 
