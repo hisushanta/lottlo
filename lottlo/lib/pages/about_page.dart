@@ -20,6 +20,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
   late TextEditingController _usernameController;
   late TextEditingController _addressController;
   late TextEditingController _phoneController;
+  late TextEditingController _emailController;
+
 
   @override
   void initState() {
@@ -27,6 +29,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _usernameController = TextEditingController();
     _addressController = TextEditingController();
     _phoneController = TextEditingController();
+    _emailController = TextEditingController();
+
     _initializeProfile();
   }
 
@@ -35,6 +39,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _usernameController.dispose();
     _addressController.dispose();
     _phoneController.dispose();
+    _emailController.dispose();
+
     super.dispose();
   }
 
@@ -49,6 +55,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
         _usernameController.text = info!.userProfile[info!.uuid]!['username'] ?? '';
         _addressController.text = info!.userProfile[info!.uuid]!['address'] ?? '';
         _phoneController.text = info!.userProfile[info!.uuid]!['number'] ?? '';
+        _emailController.text = info!.userProfile[info!.uuid]!['email'] ?? '';
+
         setState(() {});
       } else {
         info!.isLoading.addListener(() {
@@ -61,6 +69,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
             _usernameController.text = info!.userProfile[info!.uuid]!['username'] ?? '';
             _addressController.text = info!.userProfile[info!.uuid]!['address'] ?? '';
             _phoneController.text = info!.userProfile[info!.uuid]!['number'] ?? '';
+            _emailController.text = info!.userProfile[info!.uuid]!['email'] ?? '';
+
             setState(() {});
           }
         });
@@ -84,7 +94,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               _usernameController.text,
               _profileImagePath!,
               _addressController.text,
-              '',
+              _emailController.text,
               _phoneController.text,
             );
             imageCache.clear();
@@ -160,7 +170,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         _usernameController.text,
         _profileImagePath!,
         _addressController.text,
-        '',
+        _emailController.text,
         _phoneController.text,
       );
 
@@ -299,6 +309,23 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 : _phoneController.text,
                             icon: Icons.phone,
                           ),
+                    const SizedBox(height: 10),
+                    _isEditing
+                        ? TextField(
+                            controller: _emailController,
+                            decoration: const InputDecoration(
+                              labelText: 'Email',
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                          )
+                        : _buildCustomDisplayTile(
+                            title: 'Email',
+                            content: _emailController.text.isEmpty
+                                ? 'Email not provided'
+                                : _emailController.text,
+                            icon: Icons.email,
+                          ),
+
                     const SizedBox(height: 20),
                     const Text(
                       'Account Settings',
