@@ -69,7 +69,11 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Icon(Icons.account_circle, size: 60, color: Colors.black),
+              Image.asset(
+              'assets/homeIcon.png',
+              width: 24,
+              height: 24,
+            ),
               const SizedBox(height: 20),
               const Text(
                 "Welcome Back",

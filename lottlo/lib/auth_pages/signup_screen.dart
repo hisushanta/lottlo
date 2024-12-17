@@ -57,10 +57,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(vertical: 60.0,horizontal: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Image.asset(
+                  'assets/homeIcon.png',
+                  width: 24,
+                  height: 24,
+                ),
                 const SizedBox(height: 60),
                 // Header Text
                 const Text(
@@ -72,7 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 10),
                 const Text(
-                  "Make your app management easy and fun!",
+                  "One way to go every tample.",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey,
