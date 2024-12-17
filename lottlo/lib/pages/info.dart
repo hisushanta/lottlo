@@ -98,13 +98,14 @@ class ItemInfo{
           'username': userProfileData['username'],
           'profileImage': userProfileData['profileImage'],
           'address': userProfileData['address'],
+          'email': userProfileData['email'],
           'number': userProfileData['number']
         };
       } catch(e){
-        updateUserProfile("Unknown", "assets/mainIcon.png", '','');
+        updateUserProfile("Unknown", "assets/mainIcon.png", '','','');
       }
     }else{
-      updateUserProfile("Unknown", "assets/mainIcon.png", '','');
+      updateUserProfile("Unknown", "assets/mainIcon.png", '','','');
     }
   
   // Get all images
@@ -138,6 +139,9 @@ class ItemInfo{
       return userProfile[uuid]!['username'];
     } else if( checkToGet == 'number'){
       return userProfile[uuid]!['number'];
+    } 
+    else if (checkToGet == "email"){
+      return userProfile[uuid]!['email'];
     } else{
       return userProfile[uuid]!['address'];
     }
@@ -199,22 +203,25 @@ class ItemInfo{
         return false;
       }
   }
-  Future<void> updateUserProfile(String username, String profileImage, String address, String number) async {
+  Future<void> updateUserProfile(String username, String profileImage, String address,String email, String number) async {
     if (uuid != null) {
       var userRef = _firestore.collection('users').doc(uuid);
       await userRef.set({
         'username': username,
         'profileImage': profileImage,
         'address': address,
-        'number': number
+        'email': email,
+        'number': number,
       }, SetOptions(merge: true));
+      print("UserProfile: $username,$profileImage,$address,$email,$number");
 
       // Update local data
       userProfile[uuid!] = {
         'username': username,
         'profileImage': profileImage,
         'address': address,
-        'number':number
+        'email': email,
+        'number':number,
       };
     }
   }
