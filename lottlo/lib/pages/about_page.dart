@@ -84,6 +84,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               _usernameController.text,
               _profileImagePath!,
               _addressController.text,
+              '',
               _phoneController.text,
             );
             imageCache.clear();
@@ -159,6 +160,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         _usernameController.text,
         _profileImagePath!,
         _addressController.text,
+        '',
         _phoneController.text,
       );
 
