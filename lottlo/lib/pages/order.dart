@@ -65,21 +65,21 @@ class _AddItemScreenState extends State<AddItemScreen> {
           _buildPromiseItem(
             Icons.local_shipping_outlined,
             'FREE Delivery',
-            'Delivery Guaranteed Within 3 Days',
+            'Grace delivery guaranteed within 3 days after puja.',
             Colors.green,
           ),
-          const Divider(height: 1),
-          _buildPromiseItem(
-            Icons.replay_outlined,
-            '10 Days Return Policy',
-            'Easy returns within 10 days',
-            Colors.blue,
-          ),
+          // const Divider(height: 1),
+          // _buildPromiseItem(
+          //   Icons.replay_outlined,
+          //   '10 Days Return Policy',
+          //   'Easy returns within 10 days',
+          //   Colors.blue,
+          // ),
           const Divider(height: 1),
           _buildPromiseItem(
             Icons.payment_outlined,
-            'Cash on Delivery Available',
-            'Pay when you receive and are satisfied.',
+            'Cash On Delivery Available',
+            'Pay upon receiving grace.',
             Colors.orange,
           ),
           const Divider(height: 1),
@@ -145,7 +145,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
             ),
             const SizedBox(width: 4),
             const Text(
-              "Lottlo",
+              "Om Namo",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,
@@ -244,7 +244,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
               // Size Selector Section
               const Text(
-                "Available Sizes",
+                "Available Plan",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -399,6 +399,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               quantity.toString(),
                               widget.updatePrice,
                               info!.getDetails('address'),
+                              info!.getDetails("email")
                             );
                             Navigator.pop(context);
                           } else {

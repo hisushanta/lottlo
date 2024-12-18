@@ -35,7 +35,7 @@ class _WatchOrder extends State<WatchOrder> {
             ),
             const SizedBox(width: 4),
             const Text(
-              "Lottlo",
+              "Om Namo",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,

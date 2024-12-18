@@ -335,7 +335,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
             ),
             const SizedBox(width: 4),
             const Text(
-              "Lottlo",
+              "Om Namo",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,
@@ -486,7 +486,7 @@ class CustomDrawer extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Lottlo',
+                    'Om Namo',
                     style: TextStyle(
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.bold,
