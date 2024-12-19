@@ -126,14 +126,14 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
     
       if (_selectedSortOrder == 'Low to High') {
         _filteredItems.sort((a, b) {
-          final priceA = double.tryParse(a[2].split("₹")[1]) ?? 0.0; // Assuming price is at index 2
-          final priceB = double.tryParse(b[2].split("₹")[1]) ?? 0.0;
+          final priceA = double.tryParse(a[2].split("/")[0].split("₹")[1]) ?? 0.0; // Assuming price is at index 2
+          final priceB = double.tryParse(b[2].split("/")[0].split("₹")[1]) ?? 0.0;
           return priceA.compareTo(priceB);
         });
       } else if (_selectedSortOrder == 'High to Low') {
         _filteredItems.sort((a, b) {
-          final priceA = double.tryParse(a[2].split("₹")[1]) ?? 0.0;
-          final priceB = double.tryParse(b[2].split("₹")[1]) ?? 0.0;
+          final priceA = double.tryParse(a[2].split("/")[0].split("₹")[1]) ?? 0.0; // Assuming price is at index 2
+          final priceB = double.tryParse(b[2].split("/")[0].split("₹")[1]) ?? 0.0;
           return priceB.compareTo(priceA);
         });
       }
@@ -291,14 +291,14 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
     setState(() {
       if (_selectedSortOrder == 'Low to High') {
         _filteredItems.sort((a, b) {
-          final priceA = double.tryParse(a[2].split("₹")[1]) ?? 0.0; // Assuming price is at index 2
-          final priceB = double.tryParse(b[2].split("₹")[1]) ?? 0.0;
+          final priceA = double.tryParse(a[2].split("/")[0].split("₹")[1]) ?? 0.0; // Assuming price is at index 2
+          final priceB = double.tryParse(b[2].split("/")[0].split("₹")[1]) ?? 0.0;
           return priceA.compareTo(priceB);
         });
       } else if (_selectedSortOrder == 'High to Low') {
         _filteredItems.sort((a, b) {
-          final priceA = double.tryParse(a[2].split("₹")[1]) ?? 0.0;
-          final priceB = double.tryParse(b[2].split("₹")[1]) ?? 0.0;
+          final priceA = double.tryParse(a[2].split("/")[0].split("₹")[1]) ?? 0.0;
+          final priceB = double.tryParse(b[2].split("/")[0].split("₹")[1]) ?? 0.0;
           return priceB.compareTo(priceA);
         });
       } else{
@@ -660,7 +660,7 @@ class FoodCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    price,
+                    price.split("/")[0],
                     style: TextStyle(
                       color: Colors.grey[300],
                       fontSize: 12,

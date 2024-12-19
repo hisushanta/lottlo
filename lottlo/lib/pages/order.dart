@@ -36,7 +36,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   @override
   void initState() {
-    widget.updatePrice = widget.price;
+    widget.updatePrice = widget.price.split("/")[0];
     if (info!.checkLoveHave(widget.pindex)){
       iconb = Icon(Icons.favorite_rounded,color: Colors.red,);
       likeOrNot = true;
@@ -260,6 +260,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       onTap: () {
                         setState(() {
                           selectedSizeIndex = index;
+                          if (index == 0){
+                            widget.updatePrice = "₹${double.parse(widget.price.split("₹")[1].split("/")[0]) * quantity}";
+                          } else if (index == 1){
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[1])*quantity}";
+                          } else{
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[2])*quantity}";
+                          }
                         });
                       },
                       child: Container(
@@ -313,10 +320,21 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       setState(() {
                         if (quantity > 1) {
                           quantity--;
-                          widget.updatePrice =
-                              "₹${double.parse(widget.price.split("₹")[1]) * quantity}";
+                          if (selectedSizeIndex == 0){
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[0].split("₹")[1]) * quantity}";
+                          } else if (selectedSizeIndex == 1){
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[1]) * quantity}";
+                          } else{
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[2]) * quantity}";
+                          }
                         } else {
-                          widget.updatePrice = widget.price;
+                          if (selectedSizeIndex == 0){
+                            widget.updatePrice = widget.price.split("/")[0];
+                          } else if (selectedSizeIndex == 1){
+                            widget.updatePrice = "₹${widget.price.split("/")[1]}";
+                          } else{
+                            widget.updatePrice = "₹${widget.price.split("/")[2]}";
+                          }
                         }
                       });
                     },
@@ -343,8 +361,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     onPressed: () {
                       setState(() {
                         quantity++;
-                        widget.updatePrice =
-                            "₹${double.parse(widget.price.split("₹")[1]) * quantity}";
+                        if (selectedSizeIndex == 0){
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[0].split("₹")[1]) * quantity}";
+                          } else if (selectedSizeIndex == 1){
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[1]) * quantity}";
+                          } else{
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[2]) * quantity}";
+                          }
                       });
                     },
                     color: Colors.greenAccent,
@@ -385,7 +408,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             info!.addOrder(
                               widget.name,
                               widget.image,
-                              widget.price,
+                              "₹${double.parse(widget.updatePrice.split("₹")[1])/quantity}",
                               widget.pindex,
                               info!.getDetails('username'),
                               info!.getDetails('number'),
