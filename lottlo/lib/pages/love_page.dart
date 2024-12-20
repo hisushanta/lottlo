@@ -20,7 +20,7 @@ class LovePage extends StatelessWidget {
             ),
             const SizedBox(width: 4),
             const Text(
-              "Lottlo",
+              "Om Namo",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,
@@ -127,7 +127,7 @@ class LovePage extends StatelessWidget {
                                         ),
                                         const SizedBox(height: 4),
                                         Text(
-                                          "Price: ₹${item[2].split("₹")[1]}",
+                                          "Price: ${item[2].split("/")[0]}",
                                           style: TextStyle(
                                             fontSize: 14,
                                             color: Colors.green[200],

@@ -298,7 +298,7 @@ Future<void> removeLoveFromFirestore(String loveId) async{
 
   void addOrder(String itemName,String image, String price,String pindex, String userName,  String number,
                 String status, String size ,String date, String time, String expactedDate,
-                String outForOrderDate, String DeliveredDate, String quantity,String totalPrice,String deliveryAddress
+                String outForOrderDate, String DeliveredDate, String quantity,String totalPrice,String deliveryAddress, String email
                   ){
       int aindex = 0;
       if (orderActiveStatus[uuid]!.isNotEmpty){
@@ -311,7 +311,7 @@ Future<void> removeLoveFromFirestore(String loveId) async{
       }
 
       _saveOrderToFirestore({"$aindex":[itemName,image,price,pindex,userName,number,size,status,aindex.toString(),date,time,expactedDate,
-                            outForOrderDate,DeliveredDate,quantity,totalPrice,deliveryAddress]}, aindex.toString());
+                            outForOrderDate,DeliveredDate,quantity,totalPrice,deliveryAddress,email]}, aindex.toString());
   }
 
 }

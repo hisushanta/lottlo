@@ -36,7 +36,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   @override
   void initState() {
-    widget.updatePrice = widget.price;
+    widget.updatePrice = widget.price.split("/")[0];
     if (info!.checkLoveHave(widget.pindex)){
       iconb = Icon(Icons.favorite_rounded,color: Colors.red,);
       likeOrNot = true;
@@ -65,21 +65,21 @@ class _AddItemScreenState extends State<AddItemScreen> {
           _buildPromiseItem(
             Icons.local_shipping_outlined,
             'FREE Delivery',
-            'Delivery Guaranteed Within 3 Days',
+            'Grace delivery guaranteed within 3 days after puja.',
             Colors.green,
           ),
-          const Divider(height: 1),
-          _buildPromiseItem(
-            Icons.replay_outlined,
-            '10 Days Return Policy',
-            'Easy returns within 10 days',
-            Colors.blue,
-          ),
+          // const Divider(height: 1),
+          // _buildPromiseItem(
+          //   Icons.replay_outlined,
+          //   '10 Days Return Policy',
+          //   'Easy returns within 10 days',
+          //   Colors.blue,
+          // ),
           const Divider(height: 1),
           _buildPromiseItem(
             Icons.payment_outlined,
-            'Cash on Delivery Available',
-            'Pay when you receive and are satisfied.',
+            'Cash On Delivery Available',
+            'Pay upon receiving grace.',
             Colors.orange,
           ),
           const Divider(height: 1),
@@ -145,7 +145,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
             ),
             const SizedBox(width: 4),
             const Text(
-              "Lottlo",
+              "Om Namo",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,
@@ -244,7 +244,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
               // Size Selector Section
               const Text(
-                "Available Sizes",
+                "Available Plan",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -260,6 +260,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       onTap: () {
                         setState(() {
                           selectedSizeIndex = index;
+                          if (index == 0){
+                            widget.updatePrice = "₹${double.parse(widget.price.split("₹")[1].split("/")[0]) * quantity}";
+                          } else if (index == 1){
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[1])*quantity}";
+                          } else{
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[2])*quantity}";
+                          }
                         });
                       },
                       child: Container(
@@ -313,10 +320,21 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       setState(() {
                         if (quantity > 1) {
                           quantity--;
-                          widget.updatePrice =
-                              "₹${double.parse(widget.price.split("₹")[1]) * quantity}";
+                          if (selectedSizeIndex == 0){
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[0].split("₹")[1]) * quantity}";
+                          } else if (selectedSizeIndex == 1){
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[1]) * quantity}";
+                          } else{
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[2]) * quantity}";
+                          }
                         } else {
-                          widget.updatePrice = widget.price;
+                          if (selectedSizeIndex == 0){
+                            widget.updatePrice = widget.price.split("/")[0];
+                          } else if (selectedSizeIndex == 1){
+                            widget.updatePrice = "₹${widget.price.split("/")[1]}";
+                          } else{
+                            widget.updatePrice = "₹${widget.price.split("/")[2]}";
+                          }
                         }
                       });
                     },
@@ -343,8 +361,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     onPressed: () {
                       setState(() {
                         quantity++;
-                        widget.updatePrice =
-                            "₹${double.parse(widget.price.split("₹")[1]) * quantity}";
+                        if (selectedSizeIndex == 0){
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[0].split("₹")[1]) * quantity}";
+                          } else if (selectedSizeIndex == 1){
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[1]) * quantity}";
+                          } else{
+                            widget.updatePrice = "₹${double.parse(widget.price.split("/")[2]) * quantity}";
+                          }
                       });
                     },
                     color: Colors.greenAccent,
@@ -385,7 +408,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             info!.addOrder(
                               widget.name,
                               widget.image,
-                              widget.price,
+                              "₹${double.parse(widget.updatePrice.split("₹")[1])/quantity}",
                               widget.pindex,
                               info!.getDetails('username'),
                               info!.getDetails('number'),
@@ -399,6 +422,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               quantity.toString(),
                               widget.updatePrice,
                               info!.getDetails('address'),
+                              info!.getDetails("email")
                             );
                             Navigator.pop(context);
                           } else {
