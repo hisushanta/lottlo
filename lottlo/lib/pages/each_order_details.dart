@@ -4,14 +4,13 @@ class ProductDetailsScreen extends StatelessWidget {
   final String user;
   final String itemPositionInCloude;
   final int itemPositionInLocally;
-  final Function(String,int) removeOrder;
+  final Function(String, int) removeOrder;
   final String item;
   final String number;
   final String price;
   final String totalPrice;
-  final String size;
+  final String plan;
   final String bookingDate;
-  final String bookingTime;
   final String estimatedDeliveryDate;
   final String status;
   final String imageUrl;
@@ -19,6 +18,8 @@ class ProductDetailsScreen extends StatelessWidget {
   final String outForDeliveryDate;
   final String deliveredDate;
   final String quantity;
+  final String time;
+  final String address;
 
   const ProductDetailsScreen({
     Key? key,
@@ -30,9 +31,8 @@ class ProductDetailsScreen extends StatelessWidget {
     required this.number,
     required this.price,
     required this.totalPrice,
-    required this.size,
+    required this.plan,
     required this.bookingDate,
-    required this.bookingTime,
     required this.estimatedDeliveryDate,
     required this.status,
     required this.imageUrl,
@@ -40,60 +40,71 @@ class ProductDetailsScreen extends StatelessWidget {
     required this.outForDeliveryDate,
     required this.deliveredDate,
     required this.quantity,
+    required this.time,
+    required this.address,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Details', style: TextStyle(fontStyle: FontStyle.italic,fontWeight: FontWeight.bold,color: Colors.black)),
+        title: const Text(
+          'Order Details',
+          style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.white,
-        elevation: 0,
         centerTitle: true,
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.lightBlue.shade50, Colors.white],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        padding: const EdgeInsets.all(16.0),
+        color: Colors.white,
         child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Product Image
               Center(
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(16),
                   child: Image.network(
                     imageUrl,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.fill,
+                    width: double.infinity,
+                    height: 200,
                   ),
                 ),
               ),
               const SizedBox(height: 16),
+              // Product Title
               Center(
                 child: Text(
                   item,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
+              // Details Section
               _buildDetailCard('User', user),
               _buildDetailCard('Number', number),
               _buildDetailCard('Item Price', price, isPrice: true),
               _buildDetailCard('Total Price', totalPrice, isPrice: true),
-              _buildDetailCard('Size', size),
+              _buildDetailCard('Plan', plan),
               _buildDetailCard('Quantity', quantity),
-              _buildDetailCard('Date of Purchase', bookingDate),
-              _buildDetailCard('Est. Delivery Date', estimatedDeliveryDate),
+              _buildDetailCard('Booking Date', bookingDate),
+              _buildDetailCard('Time', time.isEmpty ? "Soon" : time),
+              _buildDetailCard('Address', address),
+              _buildDetailCard('Estimated Delivery Date', estimatedDeliveryDate),
               _buildStatusCard('Status', status),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildDeliveryTimeline(),
-              const SizedBox(height: 20),
-              _buildCancelOrderButton(context), // Add cancel order button
+              const SizedBox(height: 16),
+              // Cancel Order Button
+              _buildCancelOrderButton(context),
             ],
           ),
         ),
@@ -103,30 +114,35 @@ class ProductDetailsScreen extends StatelessWidget {
 
   Widget _buildDetailCard(String title, String value, {bool isPrice = false}) {
     return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
+            Expanded(
+              flex: 2,
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple,
+                ),
               ),
             ),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: isPrice ? FontWeight.bold : FontWeight.normal,
-                color: isPrice ? Colors.deepOrange : Colors.black,
+            Expanded(
+              flex: 3,
+              child: Text(
+                value,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: isPrice ? FontWeight.bold : FontWeight.normal,
+                  color: isPrice ? Colors.deepOrange : Colors.black,
+                ),
+                softWrap: true,
               ),
             ),
           ],
@@ -136,59 +152,56 @@ class ProductDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildStatusCard(String title, String value) {
-    Color statusColor = value == 'Order Confirmed'
-        ? Colors.grey
-        : value == 'Delivered'
-            ? Colors.green
-            : Colors.orange;
-    return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
-              ),
-            ),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 18,
-                color: statusColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+    return _buildDetailCard(
+      title,
+      value,
+      isPrice: false,
+    );
+  }
+
+
+  Widget _buildCancelOrderButton(BuildContext context) {
+    bool canCancel = status != 'Delivered';
+    return Center(
+      child: ElevatedButton.icon(
+        onPressed: canCancel
+            ? () {
+                removeOrder(itemPositionInCloude, itemPositionInLocally);
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Order canceled successfully')),
+                );
+              }
+            : null,
+        icon: const Icon(Icons.cancel,color: Colors.white),
+        label: const Text('Cancel Order',style:TextStyle(color: Colors.white),),
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          backgroundColor: canCancel ? Colors.redAccent : Colors.grey.shade50,
         ),
       ),
     );
   }
 
+
+
   Widget _buildDeliveryTimeline() {
-    List<String> steps = ['Order Confirmed', 'Out for Delivery', 'Delivered'];
+    List<String> steps = ['Order Confirmed', 'Out For Delivery', 'Delivered'];
     List<String> deliveryDates = [orderConfirmedDate, outForDeliveryDate, deliveredDate];
     int currentIndex = steps.indexOf(status);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        const Center(
+          child:Text(
           'Delivery Timeline',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.blueAccent,
           ),
+        ),
         ),
         const SizedBox(height: 10),
         Row(
@@ -251,40 +264,6 @@ class ProductDetailsScreen extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildCancelOrderButton(BuildContext context) {
-    bool canCancel = status != 'Delivered'; // Allow cancellation only if not delivered
-
-    return Center(
-      child: ElevatedButton.icon(
-        onPressed: canCancel
-            ? () {
-                removeOrder(itemPositionInCloude,itemPositionInLocally);
-                Navigator.of(context).pop();
-                // Logic to cancel the order
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Order cancelled successfully'),duration: Duration(seconds: 1),),
-                );
-
-                // _showCancelConfirmationDialog(context);
-              }
-            : null,
-        icon: const Icon(Icons.cancel),
-        label: const Text(
-          'Cancel Order',
-          style: TextStyle(fontSize: 18,color: Colors.red),
-        ),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          iconColor: canCancel ? Colors.redAccent : Colors.grey,
-          backgroundColor: Colors.indigo[50],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
     );
   }
 
