@@ -33,6 +33,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   int quantity = 1;
   Icon iconb = Icon(Icons.favorite_border,color: Colors.black,);
   bool likeOrNot = false;
+  DateTime? selectedDate;
 
   @override
   void initState() {
@@ -44,6 +45,19 @@ class _AddItemScreenState extends State<AddItemScreen> {
       likeOrNot = false;
     }
     super.initState();
+  }
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(), // Users can't pick past dates
+      lastDate: DateTime.now().add(const Duration(days: 365)), // Limit selection to a year from now
+    );
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
   }
 
   Widget _buildDeliveryPromise() {
@@ -374,6 +388,50 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   ),
                 ],
               ),
+              const SizedBox(height: 24),
+              const Text(
+                "Select Booking Date",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 12),
+              GestureDetector(
+                onTap: () => _selectDate(context),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        blurRadius: 6,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        selectedDate != null
+                            ? "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}"
+                            : "Select a Date",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const Icon(Icons.calendar_today, color: Colors.black54),
+                    ],
+                  ),
+                ),
+              ),
+
               _buildDeliveryPromise(),
             ],
           ),
@@ -394,13 +452,24 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       ),
                       ElevatedButton.icon(
                         onPressed: () {
-                          DateTime now = DateTime.now();
+                          if (selectedDate == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Please select a booking date."),
+                                duration: Duration(seconds: 2),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+                          // Proceed with order confirmation, using `selectedDate`.
+                          // Add it to the `addOrder` method or anywhere relevant:
+                          
+                          DateTime bookingDate = selectedDate!;  
                           String date =
-                              "${now.day}/${now.month}/${now.year}";
-                          String period = now.hour >= 12 ? 'pm' : 'am';
-                          String time = "${now.hour}:${now.minute}$period";
+                              "${bookingDate.day}/${bookingDate.month}/${bookingDate.year}";
                           DateTime dateAfterThreeDays =
-                              now.add(const Duration(days: 3));
+                              bookingDate.add(const Duration(days: 3));
                           String futureDate =
                               "${dateAfterThreeDays.day}/${dateAfterThreeDays.month}/${dateAfterThreeDays.year}";
 
@@ -415,14 +484,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               "Order Confirmed",
                               widget.isize[selectedSizeIndex],
                               date,
-                              time,
                               futureDate,
                               '',
                               '',
                               quantity.toString(),
                               widget.updatePrice,
                               info!.getDetails('address'),
-                              info!.getDetails("email")
+                              info!.getDetails("email"),
+                              ""
                             );
                             Navigator.pop(context);
                           } else {
