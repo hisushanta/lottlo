@@ -20,7 +20,7 @@ class PasswordResetGuideWidget extends StatelessWidget {
             ),
             const SizedBox(width: 4),
             const Text(
-              "Om Namo",
+              "Machhalo",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,

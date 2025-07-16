@@ -335,7 +335,7 @@ class HomePageBar extends State<BaseHome> with TickerProviderStateMixin {
             ),
             const SizedBox(width: 4),
             const Text(
-              "Om Namo",
+              "Machhalo",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,

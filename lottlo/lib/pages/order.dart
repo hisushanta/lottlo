@@ -79,7 +79,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
           _buildPromiseItem(
             Icons.local_shipping_outlined,
             'FREE Delivery',
-            'Grace delivery guaranteed within 3 days after puja.',
+            'Your Grace delivery is assured within 24 hours from the date of booking.',
             Colors.green,
           ),
           // const Divider(height: 1),
@@ -102,6 +102,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
             'Cancellation Anytime',
             'Free cancellation for anytime',
             Colors.red,
+          ),
+          const Divider(height: 1),
+          _buildPromiseItem(
+            Icons.replay_outlined,
+            'Return Policy',
+            'Check at delivery—return if not okay.',
+            Colors.blue,
           ),
         ],
       ),
@@ -159,7 +166,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
             ),
             const SizedBox(width: 4),
             const Text(
-              "Om Namo",
+              "Machhalo",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,

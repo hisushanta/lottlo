@@ -207,7 +207,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             const SizedBox(width: 4),
             const Text(
-              "Om Namo",
+              "Machhalo",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,
