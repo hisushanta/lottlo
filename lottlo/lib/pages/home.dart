@@ -486,7 +486,7 @@ class CustomDrawer extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Om Namo',
+                    'Machhalo',
                     style: TextStyle(
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.bold,

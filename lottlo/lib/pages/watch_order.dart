@@ -146,7 +146,7 @@ class _WatchOrder extends State<WatchOrder> {
                                 ),
                               ),
                               trailing: Text(
-                                "Qty: ${order[13]}",
+                                "Kg: ${order[13]}",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,

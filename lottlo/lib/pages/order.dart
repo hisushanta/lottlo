@@ -369,7 +369,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       border: Border.all(color: Colors.teal, width: 1.5),
                     ),
                     child: Text(
-                      '$quantity',
+                      '$quantity kg',
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -471,14 +471,32 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           }
                           // Proceed with order confirmation, using `selectedDate`.
                           // Add it to the `addOrder` method or anywhere relevant:
-                          
-                          DateTime bookingDate = selectedDate!;  
-                          String date =
-                              "${bookingDate.day}/${bookingDate.month}/${bookingDate.year}";
-                          DateTime dateAfterThreeDays =
-                              bookingDate.add(const Duration(days: 3));
-                          String futureDate =
-                              "${dateAfterThreeDays.day}/${dateAfterThreeDays.month}/${dateAfterThreeDays.year}";
+                          DateTime bookingDate = selectedDate!;
+
+                          DateTime today = DateTime.now();
+                          DateTime estimatedDate;
+                          String date = "${today.day}/${today.month}/${today.year}";
+
+                          // Check if selected date is today
+                          if (bookingDate.year == today.year &&
+                              bookingDate.month == today.month &&
+                              bookingDate.day == today.day) {
+                            // Estimate for next day
+                            estimatedDate = bookingDate.add(const Duration(days: 1));
+                          } else {
+                            // Future date is itself
+                            estimatedDate = bookingDate;
+                          }
+
+                          String futureDate = "${estimatedDate.day}/${estimatedDate.month}/${estimatedDate.year}";
+
+                          // DateTime bookingDate = selectedDate!;  
+                          // String date =
+                          //     "${bookingDate.day}/${bookingDate.month}/${bookingDate.year}";
+                          // DateTime dateAfterThreeDays =
+                          //     bookingDate.add(const Duration(days: 1));
+                          // String futureDate =
+                          //     "${dateAfterThreeDays.day}/${dateAfterThreeDays.month}/${dateAfterThreeDays.year}";
 
                           if (info!.checkHaveNumberOrAddress()) {
                             info!.addOrder(
